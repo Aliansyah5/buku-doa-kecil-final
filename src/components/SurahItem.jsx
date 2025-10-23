@@ -2,6 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import SurahMarker from "../assets/surah-marker.png";
 import { checkExistingSurahData } from "../helper/local-storage-helper";
+import {
+  formatSurahNumber,
+  convertToArabicNumerals,
+} from "../utils/arabicNumbers";
 
 export default function SurahItem({ surahData }) {
   const surahAvailableOffline = checkExistingSurahData(surahData.nomor);
@@ -9,7 +13,7 @@ export default function SurahItem({ surahData }) {
   return (
     <div className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-emerald-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1">
       {/* Islamic ornamental border */}
-      <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-emerald-200/20 via-green-200/10 to-teal-200/20 p-0.5 group-hover:from-emerald-300/30 group-hover:via-green-300/20 group-hover:to-teal-300/30 transition-all duration-300">
+      <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-linear-to-r from-emerald-200/20 via-green-200/10 to-teal-200/20 p-0.5 group-hover:from-emerald-300/30 group-hover:via-green-300/20 group-hover:to-teal-300/30 transition-all duration-300">
         <div className="w-full h-full bg-white/80 rounded-2xl"></div>
       </div>
 
@@ -31,13 +35,13 @@ export default function SurahItem({ surahData }) {
         <div className="flex items-center space-x-4 flex-1">
           {/* Surah Number with Islamic styling */}
           <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div className="w-12 h-12 bg-linear-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               {/* Islamic pattern overlay */}
               <div className="absolute inset-0 opacity-20 rounded-2xl">
                 <div className="islamic-icon-pattern w-full h-full"></div>
               </div>
               <span className="text-white font-bold text-sm relative z-10">
-                {surahData.nomor}
+                {formatSurahNumber(surahData.nomor)}
               </span>
               {/* Golden accent border */}
               <div className="absolute inset-0 rounded-2xl border border-yellow-300/30"></div>
@@ -64,7 +68,9 @@ export default function SurahItem({ surahData }) {
             <p className="text-gray-500 text-xs italic mb-1">
               {surahData.arti}
             </p>
-            <p className="text-gray-400 text-xs">{surahData.jumlahAyat} ayat</p>
+            <p className="text-gray-400 text-xs">
+              {convertToArabicNumerals(surahData.jumlahAyat)} ayat
+            </p>
           </div>
         </div>
 
@@ -76,14 +82,14 @@ export default function SurahItem({ surahData }) {
           {/* Decorative accent */}
           <div className="flex items-center justify-end space-x-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
-            <div className="w-3 h-0.5 bg-gradient-to-r from-emerald-400 to-green-400"></div>
+            <div className="w-3 h-0.5 bg-linear-to-r from-emerald-400 to-green-400"></div>
             <div className="w-1 h-1 bg-green-400 rounded-full"></div>
           </div>
         </div>
       </div>
 
       {/* Hover glow effect */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"></div>
+      <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-emerald-500 to-green-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"></div>
     </div>
   );
 }

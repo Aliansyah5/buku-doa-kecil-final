@@ -6,7 +6,6 @@ import {
   faPlay,
   faBookmark,
   faBookOpen,
-  faPause,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { saveLastReadSurah } from "../helper/local-storage-helper";
@@ -15,6 +14,7 @@ import Notification from "./Modal/Notification";
 import Confirmation from "./Modal/Confirmation";
 import ShareAyah from "./ShareAyah";
 import Ayah from "./Ayah";
+import { formatAyahNumber } from "../utils/arabicNumbers";
 
 export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
   const { number } = useParams();
@@ -61,7 +61,9 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
     showModal(
       <Notification
         title="Berhasil"
-        message={`${surahName} ayat ${ayahData.nomorAyat} berhasil ditandai sebagai 'terakhir dibaca'`}
+        message={`${surahName} ayat ${formatAyahNumber(
+          ayahData.nomorAyat
+        )} berhasil ditandai sebagai 'terakhir dibaca'`}
       />,
       true
     );
@@ -73,8 +75,8 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
         heading={"Simpan bookmark"}
         preText={
           <span>
-            {surahName} ayat {ayahData.nomorAyat}. <br /> Silahkan pilih
-            collection..
+            {surahName} ayat {formatAyahNumber(ayahData.nomorAyat)}. <br />{" "}
+            Silahkan pilih collection..
           </span>
         }
         confirmationObject={{
@@ -84,7 +86,7 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
                 name=""
                 id=""
                 ref={seletedCollectionIdRef}
-                className="border-1 border-stone-500 font-bold bg-white rounded-lg my-4"
+                className="border border-stone-500 font-bold bg-white rounded-lg my-4"
               >
                 {bookmark.map((collection) => (
                   <option
@@ -137,7 +139,7 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
       <div
         className={`relative group ayah-item mx-2 mt-6 mb-4 ${
           playStatus
-            ? "bg-gradient-to-r from-emerald-100 to-green-100 border-2 border-emerald-300 rounded-3xl shadow-lg p-6"
+            ? "bg-linear-to-r from-emerald-100 to-green-100 border-2 border-emerald-300 rounded-3xl shadow-lg p-6"
             : "bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-md p-6 hover:shadow-lg transition-all duration-300"
         }`}
         id={`${ayahData.nomorAyat}`}
@@ -154,34 +156,31 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
         <div className="flex items-center justify-between mb-6">
           {/* Ayah Number */}
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-lg">
-                {ayahData.nomorAyat}
+            <div className="w-12 h-12 bg-linear-to-r from-emerald-500/30 to-green-500/30 rounded-2xl flex items-center justify-center shadow-sm opacity-60 hover:opacity-80 transition-opacity duration-300">
+              <span className="text-emerald-700 font-medium text-lg">
+                {formatAyahNumber(ayahData.nomorAyat)}
               </span>
             </div>
-            {playStatus && (
-              <div className="flex items-center space-x-2 text-emerald-700">
-                <FontAwesomeIcon icon={faPause} className="animate-pulse" />
-                <span className="text-sm font-medium">Sedang diputar</span>
-              </div>
-            )}
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 opacity-50 hover:opacity-80 transition-opacity duration-300">
             {/* Last Read Button */}
             <div className="relative group/tooltip">
               <button
                 onClick={handleLastReadClick}
-                className="w-10 h-10 bg-blue-100 hover:bg-blue-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+                className="w-10 h-10 bg-blue-100/40 hover:bg-blue-200/60 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105"
               >
-                <FontAwesomeIcon icon={faBookOpen} className="text-blue-600" />
+                <FontAwesomeIcon
+                  icon={faBookOpen}
+                  className="text-blue-600/70"
+                />
               </button>
               {showTooltips && (
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
-                  <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                  <div className="bg-emerald-600/90 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
                     Tandai terakhir dibaca
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600/90 rotate-45"></div>
                   </div>
                 </div>
               )}
@@ -191,15 +190,18 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
             <div className="relative group/tooltip">
               <button
                 onClick={handleShareClick}
-                className="w-10 h-10 bg-purple-100 hover:bg-purple-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+                className="w-10 h-10 bg-purple-100/40 hover:bg-purple-200/60 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105"
               >
-                <FontAwesomeIcon icon={faShare} className="text-purple-600" />
+                <FontAwesomeIcon
+                  icon={faShare}
+                  className="text-purple-600/70"
+                />
               </button>
               {showTooltips && (
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
-                  <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                  <div className="bg-emerald-600/90 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
                     Bagikan ayat
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600/90 rotate-45"></div>
                   </div>
                 </div>
               )}
@@ -210,15 +212,18 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
               <div className="relative group/tooltip">
                 <button
                   onClick={handleClick}
-                  className="w-10 h-10 bg-green-100 hover:bg-green-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+                  className="w-10 h-10 bg-green-100/40 hover:bg-green-200/60 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105"
                 >
-                  <FontAwesomeIcon icon={faPlay} className="text-green-600" />
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    className="text-green-600/70"
+                  />
                 </button>
                 {showTooltips && (
                   <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
-                    <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                    <div className="bg-emerald-600/90 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
                       Putar audio
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600/90 rotate-45"></div>
                     </div>
                   </div>
                 )}
@@ -229,15 +234,18 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
             <div className="relative group/tooltip">
               <button
                 onClick={handleBookmarkClick}
-                className="w-10 h-10 bg-amber-100 hover:bg-amber-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+                className="w-10 h-10 bg-amber-100/40 hover:bg-amber-200/60 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105"
               >
-                <FontAwesomeIcon icon={faBookmark} className="text-amber-600" />
+                <FontAwesomeIcon
+                  icon={faBookmark}
+                  className="text-amber-600/70"
+                />
               </button>
               {showTooltips && (
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
-                  <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                  <div className="bg-emerald-600/90 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
                     Bookmark ayat
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600/90 rotate-45"></div>
                   </div>
                 </div>
               )}
@@ -257,7 +265,7 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
 
         {/* Bottom decorative border for active ayah */}
         {playStatus && (
-          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
+          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-linear-to-r from-emerald-500 to-green-500 rounded-full"></div>
         )}
       </div>
     </>

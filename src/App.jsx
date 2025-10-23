@@ -5,6 +5,8 @@ import Surah from "./pages/Surah";
 import BookmarkPage from "./pages/BookmarkPage";
 import SettingPage from "./pages/SettingPage";
 import ErrorPage from "./pages/ErrorPage";
+import DoaPage from "./pages/DoaPage";
+import DzikirPage from "./pages/DzikirPage";
 import AppContextProvider from "./provider/AppProvider";
 
 import { loader as SurahLoader } from "./pages/Surah";
@@ -28,7 +30,15 @@ const router = createBrowserRouter([
       },
       {
         path: "sholat",
-        element: <SholatPage />, // Placeholder for SholatPage component
+        element: <SholatPage />,
+      },
+      {
+        path: "doa",
+        element: <DoaPage />,
+      },
+      {
+        path: "dzikir",
+        element: <DzikirPage />,
       },
       {
         path: "surah/:number/:ayah?",
@@ -82,7 +92,7 @@ function App() {
   }
 
   return (
-    <main className="mb-20 max-w-xl md:max-w-4xl mx-auto lg:max-w-6xl px-2 md:px-4 lg:px-6 poppins-regular">
+    <main className="mb-20 w-full poppins-regular">
       <AppContextProvider>
         <RouterProvider router={router} />
       </AppContextProvider>
