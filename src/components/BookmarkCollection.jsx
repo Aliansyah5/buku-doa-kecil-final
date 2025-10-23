@@ -1,11 +1,15 @@
 import { useState, useContext } from "react";
-import FolderIcon from "../assets/folder.svg";
-import BookmarkIconPurple from "../assets/bookmark-icon-purple.svg";
-import DotThreeIcon from "../assets/dot-three.svg";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrash,
+  faFolder,
+  faBookmark,
+  faEllipsisVertical,
+  faChevronDown,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { appContext } from "../context/app-context";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Form from "./Modal/Form";
 import Confirmation from "./Modal/Confirmation";
 
@@ -81,62 +85,118 @@ export default function BookmarkCollection({ data }) {
 
   return (
     <div
-      className={`${
-        collectionOpen && "border-l-purple-500 border-l-4"
-      } rounded border-1 my-2 flex flex-col justify-start border-purple-200 p-1 lg:p-3 hover:shadow-lg transition duration-300 ease-in-out`}
+      className={`group relative bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${
+        collectionOpen ? "ring-2 ring-emerald-200" : ""
+      }`}
     >
-      <div className="bookmark-collection flex justify-between items-center p-2 pb-0 text-xs md:text-base ">
+      {/* Islamic corner decorations */}
+      <div className="absolute top-3 left-3 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
+        <div className="w-3 h-3 border-l-2 border-t-2 border-emerald-400 rounded-tl-xl"></div>
+      </div>
+      <div className="absolute top-3 right-3 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
+        <div className="w-3 h-3 border-r-2 border-t-2 border-emerald-400 rounded-tr-xl"></div>
+      </div>
+
+      {/* Collection Header */}
+      <div className="flex justify-between items-center p-6">
         <button
           onClick={handleOpenCollection}
-          className="cursor-pointer bookmark-button-group flex justify-start items-center gap-2 w-9/10"
+          className="flex items-center space-x-4 flex-1 group-hover:scale-105 transition-transform duration-300"
         >
-          <img src={FolderIcon} alt="" />
-          <div className="bookmark-detail flex flex-col text-stone-800 justify-start items-start">
-            <span className="font-bold text-purple-900">
+          {/* Folder Icon */}
+          <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center shadow-md">
+            <FontAwesomeIcon icon={faFolder} className="text-white text-lg" />
+          </div>
+
+          {/* Collection Info */}
+          <div className="flex flex-col items-start">
+            <h3 className="text-lg font-bold text-gray-800 mb-1">
               {data.collectionName}
-            </span>
-            <span className="md:text-xs">{data.lists.length} items</span>
+            </h3>
+            <p className="text-sm text-gray-600">
+              {data.lists.length} bookmark{data.lists.length !== 1 ? "s" : ""}
+            </p>
+          </div>
+
+          {/* Expand/Collapse Icon */}
+          <div className="ml-auto">
+            <FontAwesomeIcon
+              icon={collectionOpen ? faChevronDown : faChevronRight}
+              className={`text-emerald-600 transition-transform duration-300 ${
+                collectionOpen ? "rotate-0" : "rotate-0"
+              }`}
+            />
           </div>
         </button>
+
+        {/* Options Button */}
         <button
           onClick={handleCollectionOptions}
-          className="cursor-pointer bookmark-action-button"
+          className="w-10 h-10 bg-emerald-50 hover:bg-emerald-100 rounded-xl flex items-center justify-center transition-colors duration-300 ml-4"
         >
-          <img src={DotThreeIcon} alt="" />
+          <FontAwesomeIcon
+            icon={faEllipsisVertical}
+            className="text-emerald-600"
+          />
         </button>
       </div>
 
-      {collectionOpen &&
-        data.lists.map((item) => (
-          <div
-            className="bookmark-collection-item my-1 font-bold p-1 ml-6 bg-stone-50  text-xs md:text-sm hover:border-l-2 hover:border-purple-500 transition duration-300 ease-in-out"
-            key={item.id}
-          >
-            <ul className="flex flex-col">
-              <li className="flex items-center justify-between ">
-                <div className="flex justify-start items-center gap-2">
-                  <img src={BookmarkIconPurple} alt="" />
-                  <Link
-                    to={`/surah/${item.surahNumber}/${item.ayah}`}
-                    className=" text-purple-600 hover:text-purple-800"
-                  >
-                    {item.surahName} - Ayat {item.ayah}
-                  </Link>
+      {/* Collection Items */}
+      {collectionOpen && (
+        <div className="border-t border-emerald-100 bg-gradient-to-b from-emerald-50/30 to-green-50/30">
+          {data.lists.length > 0 ? (
+            <div className="p-4 space-y-3">
+              {data.lists.map((item) => (
+                <div
+                  key={item.id}
+                  className="group/item bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-emerald-100/50 hover:shadow-md transition-all duration-300"
+                >
+                  <div className="flex items-center justify-between">
+                    {/* Bookmark Info */}
+                    <div className="flex items-center space-x-3 flex-1">
+                      <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center">
+                        <FontAwesomeIcon
+                          icon={faBookmark}
+                          className="text-white text-sm"
+                        />
+                      </div>
+                      <Link
+                        to={`/surah/${item.surahNumber}/${item.ayah}`}
+                        className="text-emerald-700 hover:text-emerald-800 font-medium transition-colors duration-300"
+                      >
+                        {item.surahName} - Ayat {item.ayah}
+                      </Link>
+                    </div>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={() =>
+                        handleDeleteBookmark(item.id, data.collectionId)
+                      }
+                      className="w-8 h-8 bg-red-50 hover:bg-red-100 rounded-xl flex items-center justify-center transition-colors duration-300 opacity-0 group-hover/item:opacity-100"
+                    >
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        className="text-red-500 text-sm"
+                      />
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <button
-                    onClick={() =>
-                      handleDeleteBookmark(item.id, data.collectionId)
-                    }
-                    className="cursor-pointer broder-1 border-stone-400 hover:bg-red-500 text-xs text-red-400 hover:text-white p-1 font-bold rounded-sm md:scale-80"
-                  >
-                    <FontAwesomeIcon className="text-xs" icon={faTrash} />
-                  </button>
-                </div>
-              </li>
-            </ul>
-          </div>
-        ))}
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FontAwesomeIcon
+                  icon={faBookmark}
+                  className="text-gray-400 text-xl"
+                />
+              </div>
+              <p className="text-gray-500 text-sm">Belum ada bookmark</p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

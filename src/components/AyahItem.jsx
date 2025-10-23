@@ -1,16 +1,19 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect, useContext, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faShare,
+  faPlay,
+  faBookmark,
+  faBookOpen,
+  faPause,
+} from "@fortawesome/free-solid-svg-icons";
 
-import ShareIcon from "../assets/share-icon.svg";
-import PlayAudioIcon from "../assets/play-audio-icon.svg";
-import QuranMenuIcon from "../assets/quran-menu-icon.svg";
-import BookmarkIconPurple from "../assets/bookmark-icon-purple.svg";
 import { saveLastReadSurah } from "../helper/local-storage-helper";
 import { appContext } from "../context/app-context";
 import Notification from "./Modal/Notification";
 import Confirmation from "./Modal/Confirmation";
 import ShareAyah from "./ShareAyah";
-
 import Ayah from "./Ayah";
 
 export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
@@ -132,121 +135,130 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
   return (
     <>
       <div
-        className={`ayah-item border-b-1 border-stone-300 mx-2 mt-4 p-2 flex flex-col gap-4 ${
-          playStatus &&
-          " border-3 rounded-xl shadow-2xl border-purple-900 p-3 bg-purple-50"
+        className={`relative group ayah-item mx-2 mt-6 mb-4 ${
+          playStatus
+            ? "bg-gradient-to-r from-emerald-100 to-green-100 border-2 border-emerald-300 rounded-3xl shadow-lg p-6"
+            : "bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-md p-6 hover:shadow-lg transition-all duration-300"
         }`}
         id={`${ayahData.nomorAyat}`}
       >
-        <div className="container-button-group bg-stone-100 flex items-center justify-between py-1 px-3 rounded-lg">
-          <div className="ayah-marker text-xs border-0 p-4 rounded-full w-6 h-6 bg-purple-900 opacity-80 text-white flex justify-center items-center">
-            <span>{ayahData.nomorAyat}</span>
+        {/* Islamic corner decorations */}
+        <div className="absolute top-3 left-3 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
+          <div className="w-3 h-3 border-l-2 border-t-2 border-emerald-400 rounded-tl-xl"></div>
+        </div>
+        <div className="absolute top-3 right-3 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
+          <div className="w-3 h-3 border-r-2 border-t-2 border-emerald-400 rounded-tr-xl"></div>
+        </div>
+
+        {/* Header with ayah number and action buttons */}
+        <div className="flex items-center justify-between mb-6">
+          {/* Ayah Number */}
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-lg">
+                {ayahData.nomorAyat}
+              </span>
+            </div>
+            {playStatus && (
+              <div className="flex items-center space-x-2 text-emerald-700">
+                <FontAwesomeIcon icon={faPause} className="animate-pulse" />
+                <span className="text-sm font-medium">Sedang diputar</span>
+              </div>
+            )}
           </div>
-          <div className="button-group flex p-2 justify-center items-center gap-6">
-            {/* Last Read Button - Tooltip di atas dengan panah bawah */}
-            <div className="relative">
-              <img
-                className="cursor-pointer scale-80 active"
-                src={QuranMenuIcon}
-                alt=""
+
+          {/* Action Buttons */}
+          <div className="flex items-center space-x-3">
+            {/* Last Read Button */}
+            <div className="relative group/tooltip">
+              <button
                 onClick={handleLastReadClick}
-              />
+                className="w-10 h-10 bg-blue-100 hover:bg-blue-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+              >
+                <FontAwesomeIcon icon={faBookOpen} className="text-blue-600" />
+              </button>
               {showTooltips && (
-                <div className="relative">
-                  <div
-                    className="absolute -top-20 -left-8 bg-purple-600 text-white text-[10px] 
-                    px-2 py-1 rounded w-24 text-center"
-                  >
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
+                  <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
                     Tandai terakhir dibaca
-                    <div
-                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 
-                      w-2 h-2 bg-purple-600 rotate-45"
-                    ></div>
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Share Button - Tooltip di bawah dengan panah atas */}
-            <div className="relative">
-              <img
-                src={ShareIcon}
-                alt=""
-                className="cursor-pointer "
+            {/* Share Button */}
+            <div className="relative group/tooltip">
+              <button
                 onClick={handleShareClick}
-              />
+                className="w-10 h-10 bg-purple-100 hover:bg-purple-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+              >
+                <FontAwesomeIcon icon={faShare} className="text-purple-600" />
+              </button>
               {showTooltips && (
-                <div className="relative">
-                  <div
-                    className="absolute top-1 -left-6 bg-purple-600 text-white text-[10px] 
-                    px-2 py-1 rounded w-16 text-center"
-                  >
-                    Bagikan
-                    <div
-                      className="absolute -top-1 left-1/2 -translate-x-1/2 
-                      w-2 h-2 bg-purple-600 rotate-45"
-                    ></div>
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
+                  <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                    Bagikan ayat
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Play Button - Tooltip di atas dengan panah bawah */}
+            {/* Play/Pause Button */}
             {!playStatus && (
-              <div className="relative">
-                <img
+              <div className="relative group/tooltip">
+                <button
                   onClick={handleClick}
-                  src={PlayAudioIcon}
-                  alt=""
-                  className="cursor-pointer "
-                />
+                  className="w-10 h-10 bg-green-100 hover:bg-green-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+                >
+                  <FontAwesomeIcon icon={faPlay} className="text-green-600" />
+                </button>
                 {showTooltips && (
-                  <div
-                    className="absolute -top-11 -left-6 bg-purple-600 text-white text-[10px] 
-                    px-2 py-1 rounded w-16 text-center
-                    "
-                  >
-                    Putar audio
-                    <div
-                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 
-                      w-2 h-2 bg-purple-600 rotate-45"
-                    ></div>
+                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
+                    <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                      Putar audio
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
+                    </div>
                   </div>
                 )}
               </div>
             )}
 
-            {/* Bookmark Button - Tooltip di bawah dengan panah atas */}
-            <div className="relative">
-              <img
-                src={BookmarkIconPurple}
-                alt=""
+            {/* Bookmark Button */}
+            <div className="relative group/tooltip">
+              <button
                 onClick={handleBookmarkClick}
-                className="cursor-pointer "
-              />
+                className="w-10 h-10 bg-amber-100 hover:bg-amber-200 rounded-xl flex items-center justify-center transition-colors duration-300"
+              >
+                <FontAwesomeIcon icon={faBookmark} className="text-amber-600" />
+              </button>
               {showTooltips && (
-                <div
-                  className="absolute top-7 -left-4 bg-purple-600 text-white text-[10px] 
-                  px-2 py-1 rounded w-16 text-center
-                  "
-                >
-                  Bookmark
-                  <div
-                    className="absolute -top-1 left-1/2 -translate-x-1/2 
-                      w-2 h-2 bg-purple-600 rotate-45"
-                  ></div>
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
+                  <div className="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                    Bookmark ayat
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-emerald-600 rotate-45"></div>
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        <Ayah
-          ayah={ayahData}
-          arabicFontSize={settings.interfaceSetting.arabicFontSize}
-          showTranslation={settings.interfaceSetting.showTranslation}
-          showTransliteration={settings.interfaceSetting.showTransliteration}
-        />
+        {/* Ayah Content */}
+        <div className={`${playStatus ? "bg-white/50 rounded-2xl p-4" : ""}`}>
+          <Ayah
+            ayah={ayahData}
+            arabicFontSize={settings.interfaceSetting.arabicFontSize}
+            showTranslation={settings.interfaceSetting.showTranslation}
+            showTransliteration={settings.interfaceSetting.showTransliteration}
+          />
+        </div>
+
+        {/* Bottom decorative border for active ayah */}
+        {playStatus && (
+          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
+        )}
       </div>
     </>
   );

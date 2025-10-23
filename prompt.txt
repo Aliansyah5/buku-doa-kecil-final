@@ -1,0 +1,20 @@
+You are a professional React.js frontend developer.
+Your role is to redesign my Islamic app homepage. The app is built with React.js.
+
+Requirements:
+1. Add a **small banner** at the top with a text "Assalamualaikum" and an **Islamic illustration image** on the right side.
+2. Below the banner, add **4 main menu cards/buttons**:
+   - Baca Al-Qur’an
+   - Hadist
+   - Jadwal Sholat
+   - Doa Harian (optional, if space allows)
+3. At the bottom of the screen, create a **sticky navigation bar** with 4 icons:
+   - Home
+   - Search
+   - Bookmark
+   - Settings
+4. Apply a **green Islamic color scheme** (soft green gradient for background, white for cards, darker green for navigation bar).
+5. Use **modern clean UI** with TailwindCSS. Rounded corners, shadow for cards, and readable typography.
+6. Make sure the design is **responsive for mobile first**.
+
+Please generate the React.js (with TailwindCSS) component code for this homepage, including the layout, banner, menu cards, and sticky navigation.

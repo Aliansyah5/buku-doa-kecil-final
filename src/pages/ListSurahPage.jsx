@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import Layout from "../components/Layout/Layout";
+import IslamicCard from "../components/UI/IslamicCard";
 import LastReadBanner from "../assets/last-read-banner.png";
 import QuranSmall from "../assets/quran-small.svg";
 
@@ -9,12 +11,11 @@ import SurahItem from "../components/SurahItem";
 
 import { getLastReadSurah, getUsername } from "../helper/local-storage-helper";
 import LoadingIndicator from "../components/LoadingIndicator";
-import Header from "../components/Header";
 import Form from "../components/Modal/Form";
 import { scrollToTop } from "../utils/scrollUtils";
 import useTitle from "../hooks/useTitle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { faCircleCheck, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function ListSurahPage() {
   const [keyword, setKeyword] = useState("");
@@ -43,7 +44,7 @@ export default function ListSurahPage() {
         />
       );
     }
-  }, [showModal]);
+  }, [showModal, saveUsername, userNameApp]);
 
   useEffect(() => {
     scrollToTop("instant");
@@ -82,34 +83,49 @@ export default function ListSurahPage() {
     });
   }, [debouncedKeyword, listSurah]);
 
-  function handleSearchIconClick() {
-    searchBarRef.current.focus();
-  }
-
   if (listSurah.length === 0) return <LoadingIndicator />;
 
   if (listSurah.length > 0)
     return (
-      <>
-        <div className="poppins-regular">
-          <Header
-            title="Aplikasi Al Quran"
-            searchButton
-            searchFnCallback={handleSearchIconClick}
-          />
+      <Layout showBanner={!keyword}>
+        <div className="px-6 py-4">
+          {/* Header Section */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">
+              Daftar Surat Al-Qur'an
+            </h1>
+            <p className="text-gray-600 text-sm">
+              Pilih surat yang ingin Anda baca
+            </p>
+          </div>
 
+          {/* Welcome & Last Read Section */}
           {!keyword && (
-            <div className="flex flex-col md:flex-row md:justify-evenly justify-center p-4 md:p-1 items-start md:items-center">
-              <div className="welcome-banner flex flex-col mb-6 px-4 duration-300 ease-in sm:text-xl lg:text-2xl sm:text-center">
-                <h3 className="text-stone-500 mb-1">Assalamualaikum</h3>
-                <h2 className="text-stone-700 font-bold tracking-widest text-lg">
-                  {getUsername() || ""}
-                </h2>
+            <div className="mb-8 space-y-6">
+              {/* Welcome Card */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-emerald-100 shadow-lg">
+                <div className="text-center">
+                  <h3 className="text-emerald-600 text-lg mb-2">
+                    Assalamualaikum
+                  </h3>
+                  <h2 className="text-gray-800 font-bold text-xl">
+                    {getUsername() || "Pengguna"}
+                  </h2>
+                  <div className="flex items-center justify-center space-x-2 mt-3">
+                    <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-emerald-300"></div>
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                    <div className="w-4 h-0.5 bg-emerald-300"></div>
+                    <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+                    <div className="w-4 h-0.5 bg-emerald-300"></div>
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                    <div className="w-8 h-0.5 bg-gradient-to-l from-transparent to-emerald-300"></div>
+                  </div>
+                </div>
               </div>
 
+              {/* Last Read Card */}
               <div
-                className={`card-last-read saturate-75 rounded-xl h-[131px] bg-no-repeat py-4 px-6 md:mx-4  bg-cover text-white mb-2 shadow-xl  duration-300 ease-in w-full min-[480px]:max-w-[350px] cursor-pointer`}
-                style={{ backgroundImage: `url(${LastReadBanner})` }}
+                className="relative bg-gradient-to-r from-emerald-600 to-green-500 rounded-3xl p-6 shadow-lg cursor-pointer group overflow-hidden"
                 onClick={() =>
                   navigate(
                     lastRead
@@ -118,71 +134,94 @@ export default function ListSurahPage() {
                   )
                 }
               >
-                <div className="last-read flex gap-2 mb-4">
-                  <img src={QuranSmall} alt="" />
-                  <span className="text-sm">
-                    {lastRead ? "Terakhir dibaca" : "Mulai baca Al Quran"}
-                  </span>
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="islamic-ornament-pattern w-full h-full"></div>
                 </div>
-                <div className="last-surah-ayah">
-                  <h4 className="font-bold text-lg">
-                    {lastRead
-                      ? listSurah[lastRead.surahNumber - 1].namaLatin
-                      : "Al-Fatihah"}
-                  </h4>
-                  <p className="text-xs opacity-80">
-                    Ayat No: {lastRead ? lastRead.ayah : "1"}
-                  </p>
+
+                <div className="relative z-10 flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                    <img src={QuranSmall} alt="Quran" className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-emerald-100 text-sm mb-1">
+                      {lastRead ? "Terakhir dibaca" : "Mulai baca Al-Qur'an"}
+                    </p>
+                    <h4 className="text-white font-bold text-lg">
+                      {lastRead
+                        ? listSurah[lastRead.surahNumber - 1]?.namaLatin
+                        : "Al-Fatihah"}
+                    </h4>
+                    <p className="text-emerald-200 text-xs">
+                      Ayat: {lastRead ? lastRead.ayah : "1"}
+                    </p>
+                  </div>
+                  <div className="text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                    <svg
+                      className="w-6 h-6"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="container-list-of-surah p-4">
-            <div className="search-box p-1 ">
+          {/* Search Section */}
+          <div className="mb-6">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <FontAwesomeIcon icon={faSearch} className="text-gray-400" />
+              </div>
               <input
-                className="shadow-lg border-1 w-full text-sm border-purple-600 rounded p-2 focus:border-purple-900"
+                className="w-full pl-12 pr-4 py-4 bg-white/70 backdrop-blur-sm border border-emerald-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-700 placeholder-gray-500 shadow-lg"
                 type="search"
-                name=""
                 ref={searchBarRef}
-                id=""
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
-                placeholder="cari nama/nomor surat..."
+                placeholder="Cari nama atau nomor surat..."
                 autoComplete="off"
               />
             </div>
+          </div>
 
-            <hr className="border border-stone-200 my-2" />
-
-            <div className="p-2">
-              <p className="text-xs font-semibold md:text-sm">
-                Logo{" "}
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  style={{ color: "#7c3aed" }}
-                  className="mr-1"
-                />
-                disamping nama surat, menandakan surat bisa diakses offline
+          {/* Info Section */}
+          <div className="bg-emerald-50/50 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-emerald-100">
+            <div className="flex items-start space-x-3">
+              <FontAwesomeIcon
+                icon={faCircleCheck}
+                className="text-emerald-600 mt-1 flex-shrink-0"
+              />
+              <p className="text-sm text-gray-700 leading-relaxed">
+                <span className="font-semibold text-emerald-700">
+                  Icon checklist
+                </span>{" "}
+                di samping nama surat menandakan surat dapat diakses offline
                 (kecuali audio)
               </p>
             </div>
+          </div>
 
-            <hr className="border border-stone-200 my-2" />
-
-            <div className="list-surah md:grid md:grid-cols-2 gap-5 lg:grid-cols-3 lg:gap-7">
-              {filteredSurah.map((item) => (
-                <Link
-                  className="md:flex-1/3 lg:flex-1/4 flex-shrink-0"
-                  to={`/surah/${item.nomor}`}
-                  key={item.nomor}
-                >
-                  <SurahItem surahData={item} />
-                </Link>
-              ))}
-            </div>
+          {/* Surah List */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {filteredSurah.map((item) => (
+              <Link
+                to={`/surah/${item.nomor}`}
+                key={item.nomor}
+                className="block"
+              >
+                <SurahItem surahData={item} />
+              </Link>
+            ))}
           </div>
         </div>
-      </>
+      </Layout>
     );
 }

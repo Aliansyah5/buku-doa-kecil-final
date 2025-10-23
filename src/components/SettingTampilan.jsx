@@ -1,8 +1,15 @@
 import { useContext, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBookOpen,
+  faTextHeight,
+  faEye,
+  faUser,
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
 import { ARABIC_FONT_SIZE } from "../constant/ARABIC_FONT_SIZE";
 import Ayah from "./Ayah";
 import Notification from "./Modal/Notification";
-import QuranMenuIcon from "../assets/quran-menu-icon.svg";
 
 import { appContext } from "../context/app-context";
 
@@ -40,13 +47,21 @@ export default function SettingTampilan() {
   }
 
   return (
-    <div className="poppins-regular flex flex-col gap-1 ">
-      <div className="section-tampilan bg-white p-2 border-transparent shadow-md m-2 rounded-xl">
-        <h2 className="text-lg font-bold mb-1">Ukuran Teks Arab</h2>
-        <div className="section-body p-2 flex flex-col gap-1">
+    <div className="font-poppins space-y-6">
+      {/* Arabic Font Size Section */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <FontAwesomeIcon icon={faTextHeight} className="text-white" />
+            </div>
+            <h2 className="text-lg font-bold text-white">Ukuran Teks Arab</h2>
+          </div>
+        </div>
+        <div className="p-6 space-y-4">
           {Object.entries(ARABIC_FONT_SIZE).map(([key, value]) => {
             return (
-              <div key={value} className="flex justify-start items-center">
+              <div key={value} className="flex items-center space-x-3 group">
                 <input
                   name="font-size"
                   onChange={() =>
@@ -64,9 +79,12 @@ export default function SettingTampilan() {
                   id={key}
                   value={key}
                   type="radio"
-                  className="cursor-pointer w-4 h-4 accent-purple-600"
+                  className="w-5 h-5 text-emerald-600 bg-white border-2 border-emerald-300 focus:ring-emerald-500 focus:ring-2"
                 />
-                <label htmlFor={key} className="text-sm ml-2">
+                <label
+                  htmlFor={key}
+                  className="text-sm font-medium text-gray-700 capitalize cursor-pointer group-hover:text-emerald-700 transition-colors duration-300"
+                >
                   {key}
                 </label>
               </div>
@@ -75,15 +93,28 @@ export default function SettingTampilan() {
         </div>
       </div>
 
-      <div className="section-tampilan bg-white p-2 border-transparent shadow-md m-2 rounded-xl">
-        <h2 className="text-lg font-bold mb-1">Tampilan</h2>
-        <div className="section-body flex flex-col gap-2 p-2">
-          <div className="flex justify-between items-center text-sm">
-            <label htmlFor="transliterasi">Tampilkan Transliterasi</label>
+      {/* Display Settings Section */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <FontAwesomeIcon icon={faEye} className="text-white" />
+            </div>
+            <h2 className="text-lg font-bold text-white">Tampilan</h2>
+          </div>
+        </div>
+        <div className="p-6 space-y-6">
+          <div className="flex justify-between items-center p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
+            <label
+              htmlFor="transliterasi"
+              className="text-sm font-medium text-gray-700"
+            >
+              Tampilkan Transliterasi
+            </label>
             <input
               id="transliterasi"
               type="checkbox"
-              className="cursor-pointer w-4 h-4 accent-purple-600"
+              className="w-5 h-5 text-emerald-600 bg-white border-2 border-emerald-300 rounded focus:ring-emerald-500 focus:ring-2"
               onChange={(e) =>
                 handleSaveSettings({
                   ...settings,
@@ -96,12 +127,17 @@ export default function SettingTampilan() {
               defaultChecked={settings.interfaceSetting.showTransliteration}
             />
           </div>
-          <div className="flex justify-between items-center text-sm">
-            <label htmlFor="terjemahan">Tampilkan Terjemahan</label>
+          <div className="flex justify-between items-center p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
+            <label
+              htmlFor="terjemahan"
+              className="text-sm font-medium text-gray-700"
+            >
+              Tampilkan Terjemahan
+            </label>
             <input
               id="terjemahan"
               type="checkbox"
-              className="cursor-pointer w-4 h-4 accent-purple-600"
+              className="w-5 h-5 text-emerald-600 bg-white border-2 border-emerald-300 rounded focus:ring-emerald-500 focus:ring-2"
               onChange={(e) =>
                 handleSaveSettings({
                   ...settings,
@@ -116,68 +152,107 @@ export default function SettingTampilan() {
           </div>
         </div>
       </div>
-      <div className="section-tampilan bg-white p-2 border-transparent shadow-md m-2 rounded-xl">
-        <h2 className="text-lg font-bold mb-1">Preview</h2>
-        <div className="section-body p-2">
+
+      {/* Preview Section */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <FontAwesomeIcon icon={faEye} className="text-white" />
+            </div>
+            <h2 className="text-lg font-bold text-white">Preview</h2>
+          </div>
+        </div>
+        <div className="p-6">
           <Ayah {...settings.interfaceSetting} ayah={sampleAyah} />
         </div>
       </div>
 
-      <div className="section-tampilan bg-white p-4 border-transparent shadow-md m-2 rounded-xl">
-        <h2 className="text-lg font-bold mb-1">Nama Pengguna</h2>
-        <p className="text-sm mb-1">Rubah nama pengguna disini.</p>
-        <div className="section-body flex gap-2 text-sm">
-          <input
-            className="border-1 border-stone-600 rounded-md p-1 w-3/4 sm:w-2/5"
-            type="text"
-            placeholder="Nama Pengguna"
-            defaultValue={userNameApp}
-            ref={usernameRef}
-          />
-          <button
-            onClick={handleSaveUsername}
-            className="p-2 w-1/4 sm:w-auto bg-purple-700 text-white text-sm rounded-md shadow-md"
-          >
-            Simpan
-          </button>
+      {/* Username Section */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <FontAwesomeIcon icon={faUser} className="text-white" />
+            </div>
+            <h2 className="text-lg font-bold text-white">Nama Pengguna</h2>
+          </div>
+        </div>
+        <div className="p-6">
+          <p className="text-sm text-gray-600 mb-4">
+            Ubah nama pengguna Anda di sini
+          </p>
+          <div className="flex gap-3">
+            <input
+              className="flex-1 px-4 py-3 bg-white border border-emerald-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+              type="text"
+              placeholder="Nama Pengguna"
+              defaultValue={userNameApp}
+              ref={usernameRef}
+            />
+            <button
+              onClick={handleSaveUsername}
+              className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-500 text-white font-medium rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              Simpan
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="section-tampilan bg-white p-2 border-transparent shadow-md m-2 rounded-xl">
-        <h2 className="text-lg font-bold mb-1">Terakhir Dibaca</h2>
-        <div className="section-body flex flex-col gap-2 p-2">
-          <div>
-            <p className="text-sm">
-              Secara <b>default</b> fitur <i>Terakhir Dibaca</i> hanya menandai
-              ayat jika anda klik tombol{" "}
-              <span className="inline">
-                <img className="inline scale-80" src={QuranMenuIcon} alt="" />
-              </span>
-              pada ayat yg diinginkan.
+      {/* Last Read Section */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <FontAwesomeIcon icon={faClock} className="text-white" />
+            </div>
+            <h2 className="text-lg font-bold text-white">Terakhir Dibaca</h2>
+          </div>
+        </div>
+        <div className="p-6 space-y-4">
+          <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+            <p className="text-sm text-gray-700 leading-relaxed">
+              Secara <span className="font-semibold">default</span> fitur{" "}
+              <em>Terakhir Dibaca</em> hanya menandai ayat jika Anda klik tombol{" "}
+              <span className="inline-flex items-center space-x-1">
+                <FontAwesomeIcon
+                  icon={faBookOpen}
+                  className="text-emerald-600"
+                />
+              </span>{" "}
+              pada ayat yang diinginkan.
             </p>
           </div>
-          <div className="flex justify-between items-center font-bold mt-4 text-sm">
-            <label htmlFor="autoLastRead">
-              Selalu tandai "terakhir dibaca" di setiap membuka halaman surat
-            </label>
-            <input
-              id="autoLastRead"
-              type="checkbox"
-              className="cursor-pointer w-4 h-4 accent-purple-600 scale-110"
-              onChange={(e) =>
-                handleSaveSettings({
-                  ...settings,
-                  autoLastReadOnVisitedSurah: e.target.checked,
-                })
-              }
-              defaultChecked={settings.autoLastReadOnVisitedSurah}
-            />
-          </div>
-          <div className="rounded-md shadow-md p-1 pl-4 bg-stone-100 mt-4">
-            <p className="italic text-sm">
-              Jika diaktifkan, maka setiap kali anda membuka halaman surat
-              tertentu, sistem akan mencatatnya sebagai 'terakhir dibaca'
-            </p>
+
+          <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
+            <div className="flex justify-between items-start space-x-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="autoLastRead"
+                  className="text-sm font-semibold text-gray-800 cursor-pointer"
+                >
+                  Selalu tandai "terakhir dibaca" di setiap membuka halaman
+                  surat
+                </label>
+                <p className="text-xs text-gray-600 mt-1">
+                  Jika diaktifkan, sistem akan mencatat setiap kali Anda membuka
+                  halaman surat sebagai 'terakhir dibaca'
+                </p>
+              </div>
+              <input
+                id="autoLastRead"
+                type="checkbox"
+                className="w-5 h-5 text-emerald-600 bg-white border-2 border-emerald-300 rounded focus:ring-emerald-500 focus:ring-2 mt-1"
+                onChange={(e) =>
+                  handleSaveSettings({
+                    ...settings,
+                    autoLastReadOnVisitedSurah: e.target.checked,
+                  })
+                }
+                defaultChecked={settings.autoLastReadOnVisitedSurah}
+              />
+            </div>
           </div>
         </div>
       </div>

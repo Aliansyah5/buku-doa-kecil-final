@@ -82,7 +82,7 @@ export default function SurahContent({ loadedSurahData }) {
   }
 
   return (
-    <div className="poppins-regular mb-40">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/30 to-green-50/50 mb-40">
       <SurahAndAyahNavigation surahData={loadedSurahData} />
 
       <>
@@ -115,34 +115,66 @@ export default function SurahContent({ loadedSurahData }) {
           ))}
         </div>
 
-        <div className="fixed bottom-14 md:bottom-22 lg:bottom-14 left-0 right-0 mx-auto w-full px-3">
+        <div className="fixed bottom-14 md:bottom-22 lg:bottom-14 left-0 right-0 mx-auto w-full px-3 z-10">
           <div className="max-w-xl mx-auto relative">
             {activeAyah.ayahNumber && (
-              <div
-                className="text-xs text-white bg-purple-600/80 
-                        rounded-t-lg px-3 py-2 font-medium -mb-1 inline-block"
-              >
-                {loadedSurahData.namaLatin} • Ayat {activeAyah.ayahNumber}
+              <div className="text-xs text-white bg-gradient-to-r from-emerald-600 to-green-500 rounded-t-2xl px-4 py-2 font-medium -mb-1 inline-block shadow-lg">
+                <div className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse"></span>
+                  <span>
+                    {loadedSurahData.namaLatin} • Ayat {activeAyah.ayahNumber}
+                  </span>
+                </div>
               </div>
             )}
-            <audio
-              className="w-full bg-purple-300/80 shadow-lg rounded-lg p-3 
-                      border-2 border-purple-400
+            <div className="bg-white/95 backdrop-blur-lg shadow-xl rounded-2xl border border-emerald-100 overflow-hidden">
+              {/* Custom Audio Player Header */}
+              {activeAyah.ayahNumber && (
+                <div className="bg-gradient-to-r from-emerald-50 to-green-50 px-4 py-2 border-b border-emerald-100">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-emerald-700 font-medium">
+                      Sedang Diputar
+                    </span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                      <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse delay-75"></div>
+                      <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse delay-150"></div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-                      [&::-webkit-media-controls-current-time-display]:text-purple-900
-                      [&::-webkit-media-controls-time-remaining-display]:text-purple-900
-                      [&::-webkit-media-controls-timeline]:text-purple-200
-                      [&::-webkit-media-controls-play-button]:text-white
-                      [&::-webkit-media-controls-volume-slider]:accent-purple-200
-                      [&::-webkit-media-controls-mute-button]:text-white
-                      hover:bg-purple-400/80 transition-colors duration-300"
-              src={null}
-              ref={audioRef}
-              controls
-              onEnded={(event) => {
-                handleAyahPlayedEnded(event, loadedSurahData);
-              }}
-            />
+              {/* Audio Element */}
+              <audio
+                className="w-full h-12 bg-transparent outline-none
+                        [&::-webkit-media-controls-panel]:bg-transparent
+                        [&::-webkit-media-controls-current-time-display]:text-emerald-700
+                        [&::-webkit-media-controls-current-time-display]:font-medium
+                        [&::-webkit-media-controls-time-remaining-display]:text-emerald-700
+                        [&::-webkit-media-controls-time-remaining-display]:font-medium
+                        [&::-webkit-media-controls-timeline]:bg-emerald-100
+                        [&::-webkit-media-controls-timeline]:rounded-full
+                        [&::-webkit-media-controls-timeline]:h-1
+                        [&::-webkit-media-controls-play-button]:bg-emerald-500
+                        [&::-webkit-media-controls-play-button]:rounded-full
+                        [&::-webkit-media-controls-play-button]:text-white
+                        [&::-webkit-media-controls-play-button]:shadow-md
+                        [&::-webkit-media-controls-volume-slider]:accent-emerald-500
+                        [&::-webkit-media-controls-mute-button]:text-emerald-600
+                        hover:bg-emerald-50/30 transition-colors duration-300"
+                src={null}
+                ref={audioRef}
+                controls
+                onEnded={(event) => {
+                  handleAyahPlayedEnded(event, loadedSurahData);
+                }}
+              />
+
+              {/* Islamic decorative bottom border */}
+              <div className="flex items-center justify-center py-2">
+                <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent"></div>
+              </div>
+            </div>
           </div>
         </div>
       </>

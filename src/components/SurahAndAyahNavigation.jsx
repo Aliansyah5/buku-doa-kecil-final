@@ -48,72 +48,117 @@ export default function SurahAndAyahNavigation({ surahData }) {
 
   return (
     <>
-      <div className="header fixed w-full right-0 left-0 top-0 z-10 bg-stone-100 shadow-xl rounded-xl grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 px-4 py-2 text-sm">
-        <button
-          className="border-1 border-stone-200  bg-white p-2 flex gap-2 justify-center items-center rounded-lg cursor-pointer order-3 md:order-1 justify-self-end md:justify-self-end max-w-[140px] hover:shadow-lg hover:bg-purple-300/40"
-          onClick={() => {
-            if (prevSurah) navigate(`/surah/${prevSurah}`);
-          }}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-          {!prevSurah && <span>---</span>}
-          {prevSurah && (
-            <span>
-              {prevSurah}. {listSurah[prevSurah - 1].namaLatin}
+      {/* Compact Navigation Bar */}
+      <div className="fixed left-0 right-0 top-0 z-20 bg-white/95 backdrop-blur-lg shadow-sm border-b border-emerald-100 overflow-hidden">
+        {/* Main Navigation Row */}
+        <div className="flex items-center justify-between px-2 sm:px-4 py-2.5 max-w-7xl mx-auto w-full min-w-0">
+          {/* Left: Previous Surah */}
+          <button
+            className={`flex items-center space-x-2 px-2 sm:px-3 py-2 rounded-xl transition-all duration-200 flex-shrink-0 ${
+              prevSurah
+                ? "text-emerald-700 hover:bg-emerald-50 active:scale-95"
+                : "text-gray-300 cursor-not-allowed"
+            }`}
+            onClick={() => prevSurah && navigate(`/surah/${prevSurah}`)}
+            disabled={!prevSurah}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} className="text-sm" />
+            <span className="text-xs font-medium hidden md:block max-w-[120px] truncate">
+              {prevSurah
+                ? `${prevSurah}. ${listSurah[prevSurah - 1]?.namaLatin}`
+                : "---"}
             </span>
-          )}
-        </button>
+            <span className="text-xs font-medium md:hidden">
+              {prevSurah || "---"}
+            </span>
+          </button>
 
-        <select
-          className=" order-1 md:order-2 justify-self-end max-w-[140px] hover:shadow-lg text-purple-900 border-1 border-stone-200 font-bold bg-white p-1 rounded-lg md:max-w-[190px]"
-          name=""
-          id=""
-          value={selectedSurah}
-          onChange={handleSelectSurah}
-        >
-          {listSurah.map((item) => {
-            return (
-              <option
-                className={
-                  item.nomor == number
-                    ? "bg-purple-900 text-white font-bold"
-                    : "font-normal text-black"
-                }
-                value={item.nomor}
-                key={item.nomor}
+          {/* Center: Surah & Ayah Selectors */}
+          <div className="flex items-center space-x-2 flex-1 max-w-sm mx-2 sm:mx-4 min-w-0">
+            {/* Surah Selector */}
+            <div className="flex-1 min-w-0">
+              <select
+                value={selectedSurah}
+                onChange={handleSelectSurah}
+                className="w-full bg-white border border-emerald-200 rounded-xl px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:border-transparent transition-all duration-200 truncate"
               >
-                {item.nomor}. {item.namaLatin}
-              </option>
-            );
-          })}
-        </select>
-        <select
-          value={selectedAyah}
-          onChange={(e) => handleSelectAyah(e.target.value)}
-          className=" justify-self-start  md:justify-self-auto max-w-[140px] hover:shadow-lg order-2 md:order-3 border-1 border-stone-200 bg-white p-1 rounded-lg md:max-w-[190px]"
-        >
-          <option value={0}>Lompat ke ayat</option>
-          {surahData.ayat.map((item) => (
-            <option key={item.nomorAyat} value={item.nomorAyat}>
-              Ayat {item.nomorAyat}
-            </option>
-          ))}
-        </select>
-        <button
-          className="order-4 border-1 border-stone-200  bg-white p-2 flex gap-2 justify-center items-center rounded-lg cursor-pointer justify-self-start  md:justify-self-auto max-w-[140px] hover:shadow-lg hover:bg-purple-300/40"
-          onClick={() => {
-            if (nextSurah) navigate(`/surah/${nextSurah}`);
-          }}
-        >
-          {!nextSurah && <span>---</span>}
-          {nextSurah && (
-            <span>
-              {nextSurah}. {listSurah[nextSurah - 1].namaLatin}
+                {listSurah.map((item) => (
+                  <option
+                    key={item.nomor}
+                    value={item.nomor}
+                    className={item.nomor == number ? "bg-emerald-50" : ""}
+                  >
+                    {item.nomor}. {item.namaLatin}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-emerald-200 flex-shrink-0"></div>
+
+            {/* Ayah Selector */}
+            <div className="w-20 sm:w-24 flex-shrink-0">
+              <select
+                value={selectedAyah}
+                onChange={(e) => handleSelectAyah(e.target.value)}
+                className="w-full bg-white border border-emerald-200 rounded-xl px-1 sm:px-2 py-2 text-xs sm:text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:border-transparent transition-all duration-200"
+              >
+                <option value={0} className="text-gray-500">
+                  Ayat
+                </option>
+                {surahData.ayat.map((item) => (
+                  <option key={item.nomorAyat} value={item.nomorAyat}>
+                    {item.nomorAyat}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Right: Next Surah */}
+          <button
+            className={`flex items-center space-x-2 px-2 sm:px-3 py-2 rounded-xl transition-all duration-200 flex-shrink-0 ${
+              nextSurah
+                ? "text-emerald-700 hover:bg-emerald-50 active:scale-95"
+                : "text-gray-300 cursor-not-allowed"
+            }`}
+            onClick={() => nextSurah && navigate(`/surah/${nextSurah}`)}
+            disabled={!nextSurah}
+          >
+            <span className="text-xs font-medium hidden md:block max-w-[120px] truncate">
+              {nextSurah
+                ? `${nextSurah}. ${listSurah[nextSurah - 1]?.namaLatin}`
+                : "---"}
             </span>
-          )}
-          <FontAwesomeIcon icon={faArrowRight} />
-        </button>
+            <span className="text-xs font-medium md:hidden">
+              {nextSurah || "---"}
+            </span>
+            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+          </button>
+        </div>
+
+        {/* Bottom Info Bar - Optional compact info */}
+        <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-100 px-2 sm:px-4 py-1.5 overflow-hidden">
+          <div className="flex items-center justify-center space-x-4 text-xs text-emerald-700 max-w-7xl mx-auto w-full min-w-0">
+            <span className="flex items-center space-x-1">
+              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+              <span>Surah {number}</span>
+            </span>
+            <span className="flex items-center space-x-1">
+              <span className="w-1 h-1 bg-yellow-400 rounded-full"></span>
+              <span>{surahData.jumlahAyat} Ayat</span>
+            </span>
+            <span className="items-center space-x-1 hidden sm:flex">
+              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+              <span className="capitalize">{surahData.tempatTurun}</span>
+            </span>
+          </div>
+        </div>
       </div>
+
+      {/* Reduced Spacer - much closer to header */}
+      <div className="h-20"></div>
     </>
   );
 }

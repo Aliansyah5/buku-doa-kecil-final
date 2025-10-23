@@ -1,7 +1,8 @@
-import { Outlet, useLocation } from "react-router-dom";
-import IslamicBottomNav from "../components/Layout/IslamicBottomNav";
+import { useLocation } from "react-router-dom";
+import IslamicBanner from "./IslamicBanner";
+import IslamicBottomNav from "./IslamicBottomNav";
 
-export default function Layout() {
+export default function Layout({ children, showBanner = true }) {
   const location = useLocation();
 
   return (
@@ -11,17 +12,16 @@ export default function Layout() {
         <div className="islamic-pattern-bg w-full h-full"></div>
       </div>
 
+      {/* Banner */}
+      {showBanner && <IslamicBanner />}
+
       {/* Main Content with smooth transitions */}
       <main className="relative z-10 pb-24 transition-all duration-500 ease-in-out">
-        <div className="animate-fadeIn">
-          <Outlet />
-        </div>
+        <div className="animate-fadeIn">{children}</div>
       </main>
 
-      {/* Bottom Navigation - Hide on homepage */}
-      {location.pathname !== "/" && (
-        <IslamicBottomNav currentPath={location.pathname} />
-      )}
+      {/* Bottom Navigation */}
+      <IslamicBottomNav currentPath={location.pathname} />
     </div>
   );
 }
