@@ -42,9 +42,9 @@ self.addEventListener("install", (event) => {
         // Combine Workbox precache manifest with our static assets
         const allAssets = [
           ...STATIC_ASSETS.map((url) => new Request(url, { cache: "reload" })),
-          ...precacheManifest.map((entry) => 
-            typeof entry === 'string' ? entry : entry.url
-          )
+          ...precacheManifest.map((entry) =>
+            typeof entry === "string" ? entry : entry.url
+          ),
         ];
         return cache.addAll(allAssets);
       })
