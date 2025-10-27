@@ -1,5 +1,9 @@
 /* eslint-disable no-restricted-globals */
 
+// Workbox manifest injection point - DO NOT REMOVE
+// This will be replaced by Workbox during build
+self.__WB_MANIFEST;
+
 // Service Worker version - will be replaced during build
 const CACHE_VERSION = "buku-doa-v1.0.0-dev";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;

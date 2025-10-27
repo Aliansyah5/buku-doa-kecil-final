@@ -32,6 +32,12 @@ export default defineConfig({
       srcDir: "public",
       filename: "sw.js",
       manifest: false, // We use our own manifest.json
+      injectManifest: {
+        swSrc: "public/sw.js",
+        swDest: "dist/sw.js",
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,otf,ttf,json}"],
+        globIgnores: ["**/node_modules/**/*", "sw.js", "workbox-*.js"],
+      },
       workbox: {
         cleanupOutdatedCaches: true,
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,otf,ttf,json}"],
