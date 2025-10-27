@@ -8,6 +8,7 @@ import ErrorPage from "./pages/ErrorPage";
 import DoaPage from "./pages/DoaPage";
 import DzikirPage from "./pages/DzikirPage";
 import MasjidPage from "./pages/MasjidPage";
+import SearchPage from "./pages/SearchPage";
 import AppContextProvider from "./provider/AppProvider";
 import InstallPWA from "./components/InstallPWA";
 
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "list-surah",
         element: <ListSurahPage />,
+      },
+      {
+        path: "search",
+        element: <SearchPage />,
       },
       {
         path: "sholat",

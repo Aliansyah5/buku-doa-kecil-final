@@ -3,6 +3,7 @@ import { appContext } from "../context/app-context";
 import Layout from "../components/Layout/Layout";
 
 import LoadingIndicator from "../components/LoadingIndicator";
+import SettingLokasi from "../components/SettingLokasi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { formatGregorianDate, getHijriDate } from "../utils/dateUtils";
@@ -15,12 +16,13 @@ import {
   faChevronRight,
   faMapMarkerAlt,
   faCalendarAlt,
+  faCog,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function SholatPage() {
   const [requestData, setRequestData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const { settings } = useContext(appContext);
+  const { settings, showModal } = useContext(appContext);
 
   useTitle("Jadwal Sholat");
 
@@ -112,6 +114,16 @@ export default function SholatPage() {
               <h2 className="text-lg font-bold text-gray-800">
                 {requestData.data.lokasi}
               </h2>
+              <button
+                onClick={() => showModal(<SettingLokasi />)}
+                className="ml-2 w-8 h-8 bg-blue-100 hover:bg-blue-200 rounded-lg flex items-center justify-center transition-colors duration-300 group"
+                title="Ubah Lokasi"
+              >
+                <FontAwesomeIcon
+                  icon={faCog}
+                  className="text-blue-600 text-sm group-hover:rotate-90 transition-transform duration-300"
+                />
+              </button>
             </div>
             <p className="text-gray-600 text-sm mb-3">
               {requestData.data.daerah}

@@ -51,7 +51,6 @@ export default function SettingPage() {
               { title: "Aplikasi", body: <SettingTampilan /> },
               { title: "Qori", body: <SettingQori /> },
               { title: "Lokasi", body: <SettingLokasi /> },
-              { title: "Tentang", body: <Tentang /> },
             ]}
           />
         </div>

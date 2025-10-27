@@ -146,7 +146,20 @@ export default function IslamicBanner() {
   return (
     <div className="relative overflow-hidden">
       {/* Main Banner with Background Image */}
-      <div className="relative bg-linear-to-br from-emerald-600 via-emerald-500 to-green-600 px-5 py-6">
+      <div className="relative bg-linear-to-br from-emerald-600 via-emerald-500 to-green-600 px-5 py-6 overflow-hidden">
+        {/* Pattern Background */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <img
+            src="/icon/pattern1.png"
+            alt="Pattern"
+            className="w-full h-full object-cover opacity-[0.06]"
+            style={{
+              transform: "scale(1.5)",
+              imageRendering: "crisp-edges",
+            }}
+          />
+        </div>
+
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
@@ -344,9 +357,6 @@ export default function IslamicBanner() {
                       <h3 className="text-gray-900 font-bold text-base truncate">
                         Sholat {nextPrayer.name}
                       </h3>
-                      <span className="text-emerald-600 text-sm font-arabic font-medium shrink-0">
-                        {nextPrayer.arabicName}
-                      </span>
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
                       <div className="flex items-center space-x-1.5">
@@ -366,9 +376,6 @@ export default function IslamicBanner() {
                         </span>
                       </div>
                       <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                      <span className="text-emerald-700 font-semibold">
-                        {formatRemainingTime(nextPrayer.remainingTime)} lagi
-                      </span>
                     </div>
                   </div>
                 </div>

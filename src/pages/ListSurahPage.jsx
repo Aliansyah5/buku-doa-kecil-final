@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Layout from "../components/Layout/Layout";
 import IslamicCard from "../components/UI/IslamicCard";
@@ -9,9 +9,7 @@ import QuranSmall from "../assets/quran-small.svg";
 import { appContext } from "../context/app-context";
 import SurahItem from "../components/SurahItem";
 
-import { getLastReadSurah, getUsername } from "../helper/local-storage-helper";
 import LoadingIndicator from "../components/LoadingIndicator";
-import Form from "../components/Modal/Form";
 import { scrollToTop } from "../utils/scrollUtils";
 import useTitle from "../hooks/useTitle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,30 +19,9 @@ export default function ListSurahPage() {
   const [keyword, setKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const searchBarRef = useRef();
-  const { listSurah, showModal, userNameApp, saveUsername } =
-    useContext(appContext);
-  const navigate = useNavigate();
+  const { listSurah } = useContext(appContext);
 
   useTitle("Daftar Surat");
-
-  const lastRead = getLastReadSurah();
-
-  useEffect(() => {
-    if (!userNameApp) {
-      showModal(
-        <Form
-          heading="Assalamualaikum"
-          preText="Tolong masukkan nama panggilan kamu ya.."
-          inputObject={{
-            placeholder: "nama panggilan kamu..",
-            onSubmit: (name) => {
-              saveUsername(name);
-            },
-          }}
-        />
-      );
-    }
-  }, [showModal, saveUsername, userNameApp]);
 
   useEffect(() => {
     scrollToTop("instant");
