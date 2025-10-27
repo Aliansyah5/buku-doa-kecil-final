@@ -2,7 +2,7 @@
 
 // Workbox manifest injection point - DO NOT REMOVE
 // This will be replaced by Workbox during build
-self.__WB_MANIFEST;
+const precacheManifest = self.__WB_MANIFEST || [];
 
 // Service Worker version - will be replaced during build
 const CACHE_VERSION = "buku-doa-v1.0.0-dev";
@@ -17,7 +17,7 @@ let currentVersion = CACHE_VERSION;
 const UPDATE_CHECK_INTERVAL = 6 * 60 * 60 * 1000;
 let lastUpdateCheck = 0;
 
-// Files to cache immediately
+// Files to cache immediately (in addition to precacheManifest)
 const STATIC_ASSETS = [
   "/",
   "/index.html",
@@ -39,9 +39,14 @@ self.addEventListener("install", (event) => {
       .open(STATIC_CACHE)
       .then((cache) => {
         console.log("[Service Worker] Caching static assets");
-        return cache.addAll(
-          STATIC_ASSETS.map((url) => new Request(url, { cache: "reload" }))
-        );
+        // Combine Workbox precache manifest with our static assets
+        const allAssets = [
+          ...STATIC_ASSETS.map((url) => new Request(url, { cache: "reload" })),
+          ...precacheManifest.map((entry) => 
+            typeof entry === 'string' ? entry : entry.url
+          )
+        ];
+        return cache.addAll(allAssets);
       })
       .catch((err) => {
         console.log("[Service Worker] Cache failed:", err);
