@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offline - Buku Doa Kecil</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        text-align: center;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+      }
+
+      .icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        color: #059669;
+        margin-bottom: 10px;
+        font-size: 24px;
+      }
+
+      p {
+        color: #6b7280;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .button {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .button:hover {
+        transform: scale(1.05);
+      }
+
+      .decorative-line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 20px 0;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        background: #059669;
+        border-radius: 50%;
+      }
+
+      .line {
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #059669, transparent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon">📱</div>
+      <h1>Anda Sedang Offline</h1>
+
+      <div class="decorative-line">
+        <div class="line"></div>
+        <div class="dot"></div>
+        <div class="line"></div>
+      </div>
+
+      <p>
+        Sepertinya koneksi internet Anda terputus. Beberapa fitur mungkin tidak
+        tersedia saat offline.
+      </p>
+
+      <button class="button" onclick="window.location.reload()">
+        Coba Lagi
+      </button>
+    </div>
+  </body>
+</html>

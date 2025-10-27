@@ -46,18 +46,18 @@ export default function IslamicBottomNav({ currentPath = "/" }) {
       {/* Glassmorphism Background */}
       <div className="relative">
         {/* Background blur */}
-        <div className="absolute inset-0 bg-white/80 backdrop-blur-lg border-t border-emerald-200/50"></div>
+        <div className="absolute inset-0 bg-white/90 backdrop-blur-xl border-t border-emerald-100"></div>
 
         {/* Islamic pattern overlay */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-[0.03]">
           <div className="islamic-nav-pattern w-full h-full"></div>
         </div>
 
-        {/* Golden accent line */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-yellow-400/60 via-yellow-300/80 to-yellow-400/60"></div>
+        {/* Top accent line */}
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-emerald-400/40 via-green-400/60 to-emerald-400/40"></div>
 
         {/* Navigation Content */}
-        <div className="relative z-10 flex justify-around items-center py-3 px-4">
+        <div className="relative z-10 flex justify-around items-center py-2.5 px-3 max-w-lg mx-auto">
           {navItems.map((item, index) => {
             const active = isActive(item.link);
 
@@ -65,42 +65,42 @@ export default function IslamicBottomNav({ currentPath = "/" }) {
               <Link
                 key={index}
                 to={item.link}
-                className="flex flex-col items-center space-y-1 group relative"
+                className="flex flex-col items-center space-y-1 group relative min-w-16"
               >
                 {/* Icon Container with Islamic styling */}
                 <div className="relative">
-                  {/* Active state background with gradient */}
+                  {/* Active state background glow */}
                   {active && (
                     <div
-                      className={`absolute inset-0 bg-gradient-to-r ${item.gradient} rounded-2xl blur-sm opacity-20 scale-110`}
+                      className={`absolute inset-0 bg-linear-to-br ${item.gradient} rounded-xl blur-sm opacity-20 scale-105`}
                     ></div>
                   )}
 
                   {/* Icon background */}
                   <div
                     className={`
-                    relative w-10 h-10 rounded-2xl flex items-center justify-center
-                    transition-all duration-300 ease-in-out
+                    relative w-11 h-11 rounded-xl flex items-center justify-center
+                    transition-all duration-300 ease-out
                     ${
                       active
-                        ? `bg-gradient-to-r ${item.gradient} shadow-lg scale-110`
-                        : "bg-gray-100 hover:bg-gray-200 group-hover:scale-105"
+                        ? `bg-linear-to-br ${item.gradient} shadow-md scale-105`
+                        : "bg-gray-100 hover:bg-gray-150 group-hover:scale-105"
                     }
                   `}
                   >
                     {/* Islamic corner ornaments for active state */}
                     {active && (
                       <>
-                        <div className="absolute -top-1 -left-1 w-2 h-2 border-l-2 border-t-2 border-yellow-300/60 rounded-tl-lg"></div>
-                        <div className="absolute -top-1 -right-1 w-2 h-2 border-r-2 border-t-2 border-yellow-300/60 rounded-tr-lg"></div>
-                        <div className="absolute -bottom-1 -left-1 w-2 h-2 border-l-2 border-b-2 border-yellow-300/60 rounded-bl-lg"></div>
-                        <div className="absolute -bottom-1 -right-1 w-2 h-2 border-r-2 border-b-2 border-yellow-300/60 rounded-br-lg"></div>
+                        <div className="absolute -top-0.5 -left-0.5 w-1.5 h-1.5 border-l border-t border-white/40 rounded-tl"></div>
+                        <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 border-r border-t border-white/40 rounded-tr"></div>
+                        <div className="absolute -bottom-0.5 -left-0.5 w-1.5 h-1.5 border-l border-b border-white/40 rounded-bl"></div>
+                        <div className="absolute -bottom-0.5 -right-0.5 w-1.5 h-1.5 border-r border-b border-white/40 rounded-br"></div>
                       </>
                     )}
 
                     <FontAwesomeIcon
                       icon={item.icon}
-                      className={`text-lg transition-colors duration-300 ${
+                      className={`text-base transition-colors duration-300 ${
                         active
                           ? "text-white"
                           : "text-gray-600 group-hover:text-emerald-600"
@@ -110,14 +110,14 @@ export default function IslamicBottomNav({ currentPath = "/" }) {
 
                   {/* Active indicator dot */}
                   {active && (
-                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-yellow-300 rounded-full"></div>
+                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-emerald-400 rounded-full shadow-sm"></div>
                   )}
                 </div>
 
                 {/* Label */}
                 <span
                   className={`
-                  text-xs font-medium transition-colors duration-300
+                  text-[10px] font-medium transition-colors duration-300 leading-tight
                   ${
                     active
                       ? "text-emerald-700 font-semibold"
@@ -129,14 +129,14 @@ export default function IslamicBottomNav({ currentPath = "/" }) {
                 </span>
 
                 {/* Hover effect */}
-                <div className="absolute inset-0 rounded-2xl bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 rounded-xl bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Link>
             );
           })}
         </div>
 
         {/* Bottom safe area for mobile */}
-        <div className="h-safe-bottom bg-white/60 backdrop-blur-lg"></div>
+        <div className="h-safe-bottom bg-white/80 backdrop-blur-xl"></div>
       </div>
     </div>
   );

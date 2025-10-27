@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 import { VitePWA } from "vite-plugin-pwa";
 import { visualizer } from "rollup-plugin-visualizer";
+import { injectVersionPlugin } from "./vite-plugin-version.js";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -23,52 +24,62 @@ export default defineConfig({
     tailwindcss(),
     basicSsl(),
     visualizer({ open: true }),
+    injectVersionPlugin(), // Inject version only on production build
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: null, // We handle registration manually in main.jsx
+      strategies: "injectManifest",
+      srcDir: "public",
+      filename: "sw.js",
+      manifest: false, // We use our own manifest.json
       workbox: {
         cleanupOutdatedCaches: true,
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,otf,ttf}"],
-      },
-      includeAssets: [
-        "favicon.ico",
-        "apple-touch-icon-180x180.png",
-        "maskable-icon-512x512.png",
-      ],
-      manifest: {
-        name: "Al-Quran Digital",
-        short_name: "QuranDigital",
-        description:
-          "Baca Al-Quran dengan terjemahan Indonesia, audio murottal, dan fitur bookmark.",
-        theme_color: "#7c3aed",
-        background_color: "#ffffff",
-        display: "standalone",
-        scope: "/",
-        start_url: "/",
-        orientation: "portrait",
-        icons: [
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,otf,ttf,json}"],
+        runtimeCaching: [
           {
-            src: "pwa-64x64.png",
-            sizes: "64x64",
-            type: "image/png",
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "google-fonts-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
           },
           {
-            src: "pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
+            urlPattern: /^https:\/\/api\.myquran\.com\/.*/i,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "quran-api-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 1 day
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
           },
           {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "maskable-icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
+            urlPattern: /^https:\/\/nominatim\.openstreetmap\.org\/.*/i,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "map-api-cache",
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+              },
+            },
           },
         ],
+      },
+      devOptions: {
+        enabled: true,
+        type: "module",
       },
     }),
   ],

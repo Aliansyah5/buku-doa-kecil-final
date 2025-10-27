@@ -86,7 +86,7 @@ export default function SurahContent({ loadedSurahData }) {
       <SurahAndAyahNavigation surahData={loadedSurahData} />
 
       <>
-        <div className="surah-banner relative p-4 rounded-xl text-white flex flex-col gap-1 justify-center items-center m-6 shadow bg-cover bg-no-repeat mt-30 md:w-[512px] md:mx-auto bg-gradient-to-br from-[#DF98FA]/80 to-[#9055FF]/80 overflow-hidden">
+        <div className="surah-banner relative p-4 rounded-xl text-white flex flex-col gap-1 justify-center items-center m-6 shadow bg-cover bg-no-repeat mt-30 md:w-[512px] md:mx-auto bg-gradient-to-br from-[#4ADE80]/80 to-[#16A34A]/80 overflow-hidden">
           <h1 className="text-2xl my-2">{loadedSurahData.namaLatin}</h1>
           <h2 className="text-sm">{loadedSurahData.arti}</h2>
           <hr className="my-4 border-1 border-stone-50 w-1/2 opacity-50" />

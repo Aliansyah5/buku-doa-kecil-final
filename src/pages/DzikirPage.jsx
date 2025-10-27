@@ -86,49 +86,52 @@ export default function DzikirPage() {
     <Layout showBanner={false}>
       <div className="min-h-screen bg-linear-to-br from-gray-50 via-emerald-50/30 to-green-50/50">
         {/* Header Section */}
-        <div className="text-center py-8 px-6">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-linear-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
+        <div className="text-center py-6 px-5">
+          <div className="flex items-center justify-center space-x-3 mb-3">
+            <div className="w-11 h-11 bg-linear-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-md">
               <FontAwesomeIcon icon={faMosque} className="text-white text-lg" />
             </div>
-            <h1 className="text-3xl font-bold bg-linear-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
               Dzikir Setelah Shalat
             </h1>
           </div>
-          <p className="text-gray-600 text-sm max-w-md mx-auto">
+          <p className="text-gray-600 text-sm">
             Dzikir dan doa setelah shalat fardhu
           </p>
 
           {/* Islamic decorative line */}
           <div className="flex items-center justify-center space-x-2 mt-4">
-            <div className="w-8 h-0.5 bg-linear-to-r from-transparent to-emerald-300"></div>
-            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-            <div className="w-4 h-0.5 bg-emerald-300"></div>
-            <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-            <div className="w-4 h-0.5 bg-emerald-300"></div>
-            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-            <div className="w-8 h-0.5 bg-linear-to-l from-transparent to-emerald-300"></div>
+            <div className="w-8 h-0.5 bg-linear-to-r from-transparent via-purple-400 to-purple-300"></div>
+            <div className="w-1.5 h-1.5 bg-purple-400 rounded-full shadow-sm"></div>
+            <div className="w-4 h-0.5 bg-purple-300"></div>
+            <div className="w-1 h-1 bg-pink-400 rounded-full shadow-sm"></div>
+            <div className="w-4 h-0.5 bg-purple-300"></div>
+            <div className="w-1.5 h-1.5 bg-purple-400 rounded-full shadow-sm"></div>
+            <div className="w-8 h-0.5 bg-linear-to-l from-transparent via-purple-400 to-purple-300"></div>
           </div>
         </div>
 
         {/* Main Dzikir Card */}
         {currentDzikir && (
-          <div className="px-4 pb-24">
-            <div className="max-w-2xl mx-auto space-y-5">
+          <div className="px-4 pb-24 max-w-3xl mx-auto">
+            <div className="space-y-4">
               {/* Tasbih Counter Card */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg overflow-hidden">
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-purple-100 shadow-md overflow-hidden">
                 {/* Navigation Header */}
-                <div className="bg-linear-to-r from-emerald-500 to-green-500 px-6 py-4">
+                <div className="bg-linear-to-r from-purple-500 to-pink-600 px-5 py-3.5">
                   <div className="flex items-center justify-between text-white">
                     <button
                       onClick={handlePrevious}
-                      className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center"
+                      className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center active:scale-95"
                     >
-                      <FontAwesomeIcon icon={faChevronLeft} />
+                      <FontAwesomeIcon
+                        icon={faChevronLeft}
+                        className="text-sm"
+                      />
                     </button>
 
                     <div className="text-center">
-                      <div className="text-xs opacity-90 mb-1">Dzikir</div>
+                      <div className="text-xs opacity-90 mb-0.5">Dzikir</div>
                       <div className="text-lg font-bold">
                         {convertToArabicNumerals(currentIndex + 1)} /{" "}
                         {convertToArabicNumerals(dzikirList.length)}
@@ -137,18 +140,21 @@ export default function DzikirPage() {
 
                     <button
                       onClick={handleNext}
-                      className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center"
+                      className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center active:scale-95"
                     >
-                      <FontAwesomeIcon icon={faChevronRight} />
+                      <FontAwesomeIcon
+                        icon={faChevronRight}
+                        className="text-sm"
+                      />
                     </button>
                   </div>
                 </div>
 
                 {/* Counter Display - Like Tasbih */}
-                <div className="p-8">
-                  <div className="text-center mb-6">
-                    <div className="inline-block bg-linear-to-r from-emerald-500/20 to-green-500/20 rounded-full px-4 py-2 border border-emerald-300/50">
-                      <span className="text-emerald-700 font-semibold text-sm">
+                <div className="p-6">
+                  <div className="text-center mb-5">
+                    <div className="inline-block bg-linear-to-r from-purple-500/20 to-pink-500/20 rounded-full px-4 py-1.5 border border-purple-300/50">
+                      <span className="text-purple-700 font-semibold text-sm">
                         Dzikir ke-
                         {convertToArabicNumerals(currentDzikir.nomor_doa)}
                       </span>
@@ -156,41 +162,41 @@ export default function DzikirPage() {
                   </div>
 
                   {/* Arabic Text */}
-                  <div className="bg-linear-to-r from-emerald-50/50 to-green-50/50 rounded-2xl p-6 border border-emerald-100/50">
-                    <p className="text-right text-3xl text-gray-800 font-arabic leading-loose">
+                  <div className="bg-linear-to-br from-purple-50/50 via-pink-50/30 to-purple-50/50 rounded-xl p-5 border border-purple-100/50 mb-5">
+                    <p className="text-right text-2xl md:text-3xl text-gray-800 font-arabic leading-loose">
                       {currentDzikir.text_arab}
                     </p>
                   </div>
 
                   {/* Big Circle Counter - Tasbih Style */}
-                  <div className="relative mt-6 mb-6">
-                    <div className="w-64 h-64 mx-auto">
+                  <div className="relative mb-6">
+                    <div className="w-56 h-56 sm:w-64 sm:h-64 mx-auto">
                       {/* Outer Ring */}
-                      <div className="absolute inset-0 rounded-full bg-linear-to-br from-emerald-100 to-green-100 shadow-inner"></div>
+                      <div className="absolute inset-0 rounded-full bg-linear-to-br from-purple-100 to-pink-100 shadow-inner"></div>
 
                       {/* Inner Circle */}
-                      <div className="absolute inset-4 rounded-full bg-linear-to-br from-white to-emerald-50 shadow-xl flex items-center justify-center">
+                      <div className="absolute inset-3 rounded-full bg-linear-to-br from-white to-purple-50 shadow-lg flex items-center justify-center">
                         <div className="text-center">
-                          <div className="text-7xl font-bold bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-2">
+                          <div className="text-6xl sm:text-7xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
                             {currentCount}
                           </div>
                         </div>
                       </div>
 
                       {/* Decorative dots */}
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-green-500 rounded-full"></div>
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 bg-emerald-400 rounded-full"></div>
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 bg-green-400 rounded-full"></div>
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-purple-500 rounded-full"></div>
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-purple-400 rounded-full"></div>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2.5 h-2.5 bg-pink-400 rounded-full"></div>
                     </div>
                   </div>
 
                   {/* Action Buttons - Centered */}
-                  <div className="flex items-center justify-center gap-4 mb-6">
+                  <div className="flex items-center justify-center gap-4">
                     {/* Big Tap Button */}
                     <button
                       onClick={handleIncrement}
-                      className="w-32 h-32 rounded-full bg-linear-to-br from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-5xl shadow-2xl hover:shadow-emerald-500/50 transition-all duration-300 active:scale-95 flex items-center justify-center"
+                      className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-linear-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold text-4xl sm:text-5xl shadow-lg hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 active:scale-95 flex items-center justify-center"
                     >
                       +
                     </button>
@@ -198,12 +204,12 @@ export default function DzikirPage() {
                     {/* Reset Button */}
                     <button
                       onClick={handleReset}
-                      className="w-16 h-16 rounded-full bg-white border-2 border-red-300 hover:bg-red-50 text-red-600 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95 flex items-center justify-center"
+                      className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white border-2 border-red-300 hover:bg-red-50 hover:border-red-400 text-red-600 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95 flex items-center justify-center"
                       title="Reset"
                     >
                       <FontAwesomeIcon
                         icon={faRotateLeft}
-                        className="text-xl"
+                        className="text-lg"
                       />
                     </button>
                   </div>
@@ -211,11 +217,11 @@ export default function DzikirPage() {
               </div>
 
               {/* Translation */}
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-emerald-100/50">
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-purple-100/50 shadow-sm">
                 <div className="flex items-start space-x-3">
-                  <div className="text-xl shrink-0 mt-0.5">📖</div>
+                  <div className="text-lg shrink-0 mt-0.5">📖</div>
                   <div className="flex-1">
-                    <h4 className="text-emerald-800 font-semibold text-sm mb-2">
+                    <h4 className="text-purple-800 font-semibold text-sm mb-2">
                       Terjemahan
                     </h4>
                     <p className="text-gray-700 text-sm leading-relaxed italic">
@@ -226,9 +232,9 @@ export default function DzikirPage() {
               </div>
 
               {/* Keutamaan */}
-              <div className="bg-linear-to-r from-amber-50/40 to-yellow-50/40 rounded-2xl p-5 border border-amber-200/50">
+              <div className="bg-linear-to-r from-amber-50/50 to-yellow-50/50 rounded-xl p-4 border border-amber-200/50 shadow-sm">
                 <div className="flex items-start space-x-3">
-                  <div className="text-xl shrink-0 mt-0.5">✨</div>
+                  <div className="text-lg shrink-0 mt-0.5">✨</div>
                   <div className="flex-1">
                     <h4 className="text-amber-800 font-semibold text-sm mb-2">
                       Keutamaan & Dalil

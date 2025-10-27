@@ -4,6 +4,7 @@ import SettingTampilan from "../components/SettingTampilan";
 import SettingQori from "../components/SettingQori";
 import SettingLokasi from "../components/SettingLokasi";
 import Tentang from "../components/Tentang";
+import AppVersion from "../components/AppVersion";
 import { scrollToTop } from "../utils/scrollUtils";
 import { useEffect } from "react";
 import useTitle from "../hooks/useTitle";
@@ -54,6 +55,9 @@ export default function SettingPage() {
             ]}
           />
         </div>
+
+        {/* App Version */}
+        <AppVersion />
       </div>
     </Layout>
   );

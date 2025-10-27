@@ -74,14 +74,14 @@ export default function SholatPage() {
 
   return (
     <Layout>
-      <div className="px-6 py-4">
+      <div className="px-5 py-6 max-w-3xl mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
+        <div className="text-center mb-6">
+          <div className="flex items-center justify-center space-x-3 mb-3">
+            <div className="w-11 h-11 bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
               <FontAwesomeIcon icon={faClock} className="text-white text-lg" />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent leading-tight">
               Jadwal Sholat
             </h1>
           </div>
@@ -91,25 +91,25 @@ export default function SholatPage() {
 
           {/* Islamic decorative line */}
           <div className="flex items-center justify-center space-x-2 mt-4">
-            <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-emerald-300"></div>
-            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-            <div className="w-4 h-0.5 bg-emerald-300"></div>
-            <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-            <div className="w-4 h-0.5 bg-emerald-300"></div>
-            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-            <div className="w-8 h-0.5 bg-gradient-to-l from-transparent to-emerald-300"></div>
+            <div className="w-8 h-0.5 bg-linear-to-r from-transparent via-blue-400 to-blue-300"></div>
+            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full shadow-sm"></div>
+            <div className="w-4 h-0.5 bg-blue-300"></div>
+            <div className="w-1 h-1 bg-indigo-400 rounded-full shadow-sm"></div>
+            <div className="w-4 h-0.5 bg-blue-300"></div>
+            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full shadow-sm"></div>
+            <div className="w-8 h-0.5 bg-linear-to-l from-transparent via-blue-400 to-blue-300"></div>
           </div>
         </div>
 
         {/* Location & Date Info */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-emerald-100 shadow-lg mb-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-blue-100 shadow-md mb-5">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-2">
               <FontAwesomeIcon
                 icon={faMapMarkerAlt}
-                className="text-emerald-600"
+                className="text-blue-600 text-sm"
               />
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-lg font-bold text-gray-800">
                 {requestData.data.lokasi}
               </h2>
             </div>
@@ -117,10 +117,10 @@ export default function SholatPage() {
               {requestData.data.daerah}
             </p>
             <div className="space-y-1">
-              <p className="text-gray-800 font-medium">
+              <p className="text-gray-800 font-medium text-sm">
                 {formatGregorianDate(selectedDate)}
               </p>
-              <p className="text-emerald-600 text-sm font-medium">
+              <p className="text-blue-600 text-sm font-medium">
                 {getHijriDate(selectedDate)}
               </p>
             </div>
@@ -128,51 +128,51 @@ export default function SholatPage() {
         </div>
 
         {/* Date Navigation */}
-        <div className="flex items-center justify-center space-x-4 mb-6">
+        <div className="flex items-center justify-center space-x-3 mb-5">
           <button
             onClick={() => changeDate(-1)}
-            className="w-12 h-12 bg-white/70 backdrop-blur-sm border border-emerald-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center group"
+            className="w-10 h-10 bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center group"
           >
             <FontAwesomeIcon
               icon={faChevronLeft}
-              className="text-gray-600 group-hover:text-emerald-600 transition-colors duration-300"
+              className="text-gray-600 text-sm group-hover:text-blue-600 transition-colors duration-300"
             />
           </button>
 
           <div className="relative">
             <FontAwesomeIcon
               icon={faCalendarAlt}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm pointer-events-none z-10"
             />
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               dateFormat="dd-MM-yyyy"
-              className="pl-10 pr-4 py-3 bg-white/70 backdrop-blur-sm border border-emerald-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-center text-gray-700 shadow-lg"
+              className="pl-10 pr-4 py-2.5 bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-center text-gray-700 text-sm shadow-sm font-medium"
               calendarStartDay={1}
             />
           </div>
 
           <button
             onClick={() => changeDate(1)}
-            className="w-12 h-12 bg-white/70 backdrop-blur-sm border border-emerald-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center group"
+            className="w-10 h-10 bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center group"
           >
             <FontAwesomeIcon
               icon={faChevronRight}
-              className="text-gray-600 group-hover:text-emerald-600 transition-colors duration-300"
+              className="text-gray-600 text-sm group-hover:text-blue-600 transition-colors duration-300"
             />
           </button>
         </div>
 
         {/* Prayer Times */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-emerald-600 to-green-500 p-4">
-            <h3 className="text-white font-bold text-center text-lg">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-blue-100 shadow-md overflow-hidden">
+          <div className="bg-linear-to-r from-blue-500 to-indigo-600 p-4">
+            <h3 className="text-white font-bold text-center">
               Waktu Sholat Hari Ini
             </h3>
           </div>
 
-          <div className="p-4 space-y-3">
+          <div className="p-4 space-y-2.5">
             {Object.entries(requestData.data.jadwal).map(([key, value]) => {
               if (["tanggal", "date"].includes(key)) return null;
 
@@ -181,21 +181,21 @@ export default function SholatPage() {
               return (
                 <div
                   key={key}
-                  className="group relative bg-gradient-to-r from-emerald-50/50 to-green-50/50 backdrop-blur-sm rounded-2xl p-4 border border-emerald-100/50 hover:shadow-lg transition-all duration-300"
+                  className="group relative bg-linear-to-r from-blue-50/50 via-indigo-50/30 to-blue-50/50 backdrop-blur-sm rounded-xl p-3.5 border border-blue-100/50 hover:shadow-sm hover:border-blue-200 transition-all duration-300"
                 >
                   {/* Islamic corner decorations */}
-                  <div className="absolute top-2 left-2 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
-                    <div className="w-2 h-2 border-l border-t border-emerald-400 rounded-tl-lg"></div>
+                  <div className="absolute top-1.5 left-1.5 opacity-15 group-hover:opacity-30 transition-opacity duration-300">
+                    <div className="w-1.5 h-1.5 border-l border-t border-blue-400 rounded-tl"></div>
                   </div>
-                  <div className="absolute top-2 right-2 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
-                    <div className="w-2 h-2 border-r border-t border-emerald-400 rounded-tr-lg"></div>
+                  <div className="absolute top-1.5 right-1.5 opacity-15 group-hover:opacity-30 transition-opacity duration-300">
+                    <div className="w-1.5 h-1.5 border-r border-t border-blue-400 rounded-tr"></div>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-800 font-medium">
+                    <span className="text-gray-800 font-medium text-sm">
                       {prayerName}
                     </span>
-                    <span className="text-emerald-700 font-bold text-lg">
+                    <span className="text-blue-700 font-bold text-base">
                       {value}
                     </span>
                   </div>

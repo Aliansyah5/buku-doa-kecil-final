@@ -1,72 +1,139 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="/favicon/favicon-48x48.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="64x64"
+      href="/favicon/favicon-64x64.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/favicon/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="128x128"
+      href="/favicon/favicon-128x128.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="180x180"
+      href="/favicon/favicon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/favicon/favicon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="256x256"
+      href="/favicon/favicon-256x256.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="48x48" href="/favicon/favicon-48x48.png" />
-  <link rel="icon" type="image/png" sizes="64x64" href="/favicon/favicon-64x64.png" />
-  <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
-  <link rel="icon" type="image/png" sizes="128x128" href="/favicon/favicon-128x128.png" />
-  <link rel="icon" type="image/png" sizes="180x180" href="/favicon/favicon-180x180.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon/favicon-192x192.png" />
-  <link rel="icon" type="image/png" sizes="256x256" href="/favicon/favicon-256x256.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
 
-  <title>Al-Quran Digital</title>
-  <meta name="description" content="Baca Al-Quran dengan terjemahan Indonesia, audio murottal, dan fitur bookmark." />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://quran-frontend-zeta.vercel.app/" />
+    <title>Buku Doa Kecil - Al-Quran Digital</title>
+    <meta
+      name="description"
+      content="Aplikasi Al-Quran Digital dengan fitur doa, dzikir, jadwal sholat, dan masjid terdekat. Baca Al-Quran dengan terjemahan Indonesia, audio murottal, dan fitur bookmark."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://quran-frontend-zeta.vercel.app/" />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Al-Quran Digital" />
-  <meta property="og:description"
-    content="Baca Al-Quran dengan terjemahan Indonesia, audio murottal, dan fitur bookmark." />
-  <meta property="og:image" content="https://quran-frontend-zeta.vercel.app/og-image.jpg" />
-  <meta property="og:url" content="https://quran-frontend-zeta.vercel.app/" />
-  <meta property="og:type" content="website" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Buku Doa Kecil - Al-Quran Digital" />
+    <meta
+      property="og:description"
+      content="Aplikasi Al-Quran Digital dengan fitur doa, dzikir, jadwal sholat, dan masjid terdekat."
+    />
+    <meta
+      property="og:image"
+      content="https://quran-frontend-zeta.vercel.app/og-image.jpg"
+    />
+    <meta property="og:url" content="https://quran-frontend-zeta.vercel.app/" />
+    <meta property="og:type" content="website" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Al-Quran Digital" />
-  <meta name="twitter:description"
-    content="Baca Al-Quran dengan terjemahan Indonesia, audio murottal, dan fitur bookmark." />
-  <meta name="twitter:image" content="https://quran-frontend-zeta.vercel.app/og-image.jpg" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Buku Doa Kecil - Al-Quran Digital" />
+    <meta
+      name="twitter:description"
+      content="Aplikasi Al-Quran Digital dengan fitur doa, dzikir, jadwal sholat, dan masjid terdekat."
+    />
+    <meta
+      name="twitter:image"
+      content="https://quran-frontend-zeta.vercel.app/og-image.jpg"
+    />
 
-  <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Al-Quran Digital",
-    "url": "https://quran-frontend-zeta.vercel.app/",
-    "description": "Baca Al-Quran dengan terjemahan Indonesia, audio murottal, dan fitur bookmark."
-  }
-  </script>
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Buku Doa Kecil - Al-Quran Digital",
+        "url": "https://quran-frontend-zeta.vercel.app/",
+        "description": "Aplikasi Al-Quran Digital dengan fitur doa, dzikir, jadwal sholat, dan masjid terdekat."
+      }
+    </script>
 
-  <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico" />
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" />
 
-  <!-- Theme -->
-  <meta name="theme-color" content="#7c3aed" />
+    <!-- PWA Theme -->
+    <meta name="theme-color" content="#059669" />
+    <meta name="msapplication-TileColor" content="#059669" />
 
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Buku Doa" />
 
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Quran Digital" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="Quran Digital" />
-  <meta name="apple-touch-fullscreen" content="yes" />
-  <meta name="msapplication-TileColor" content="#7c3aed" />
+    <!-- Android PWA -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Buku Doa" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+  </head>
 
-</head>
-
-<body>
-  <div id="modal"></div>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
-
+  <body>
+    <div id="modal"></div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

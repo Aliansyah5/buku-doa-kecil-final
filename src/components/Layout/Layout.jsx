@@ -9,9 +9,9 @@ export default function Layout({ children, showBanner = true }) {
   const shouldShowBanner = showBanner && location.pathname === "/";
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 via-emerald-50/30 to-green-50/50 relative">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 via-emerald-50/20 to-green-50/30 relative">
       {/* Islamic Pattern Background */}
-      <div className="fixed inset-0 opacity-[0.02] pointer-events-none">
+      <div className="fixed inset-0 opacity-[0.015] pointer-events-none">
         <div className="islamic-pattern-bg w-full h-full"></div>
       </div>
 
@@ -19,7 +19,7 @@ export default function Layout({ children, showBanner = true }) {
       {shouldShowBanner && <IslamicBanner />}
 
       {/* Main Content with smooth transitions */}
-      <main className="relative z-10 pb-24 transition-all duration-500 ease-in-out">
+      <main className="relative z-10 pb-20 transition-all duration-300 ease-in-out">
         <div className="animate-fadeIn">{children}</div>
       </main>
 

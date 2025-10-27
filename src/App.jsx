@@ -7,7 +7,9 @@ import SettingPage from "./pages/SettingPage";
 import ErrorPage from "./pages/ErrorPage";
 import DoaPage from "./pages/DoaPage";
 import DzikirPage from "./pages/DzikirPage";
+import MasjidPage from "./pages/MasjidPage";
 import AppContextProvider from "./provider/AppProvider";
+import InstallPWA from "./components/InstallPWA";
 
 import { loader as SurahLoader } from "./pages/Surah";
 import { saveToLocalStorageSurahData } from "./helper/local-storage-helper";
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "dzikir",
         element: <DzikirPage />,
+      },
+      {
+        path: "masjid",
+        element: <MasjidPage />,
       },
       {
         path: "surah/:number/:ayah?",
@@ -95,6 +101,7 @@ function App() {
     <main className="mb-20 w-full poppins-regular">
       <AppContextProvider>
         <RouterProvider router={router} />
+        <InstallPWA />
       </AppContextProvider>
     </main>
   );
