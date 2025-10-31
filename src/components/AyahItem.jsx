@@ -50,7 +50,30 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
   }, [ayahData.nomorAyat]);
 
   function handleClick() {
-    onPlayAudio(ayahData.audio[settings.qori], {
+    const audioUrl = ayahData.audio?.[settings.qori];
+    console.log("=== AUDIO DEBUG ===");
+    console.log("Settings qori:", settings.qori);
+    console.log("Ayah number:", ayahData.nomorAyat);
+    console.log("Available audio keys:", Object.keys(ayahData.audio || {}));
+    console.log("Audio URL:", audioUrl);
+    console.log("Full audio object:", ayahData.audio);
+    console.log("==================");
+
+    if (!audioUrl) {
+      console.warn(
+        `❌ Audio not available for qori ${settings.qori} in ayah ${ayahData.nomorAyat}. Available keys:`,
+        Object.keys(ayahData.audio || {})
+      );
+      alert(
+        `Audio not available for this qori. Available: ${Object.keys(
+          ayahData.audio || {}
+        ).join(", ")}`
+      );
+      return;
+    }
+
+    console.log("✅ Playing audio with URL:", audioUrl);
+    onPlayAudio(audioUrl, {
       ayahNumber: ayahData.nomorAyat,
       surahNumber: number,
     });

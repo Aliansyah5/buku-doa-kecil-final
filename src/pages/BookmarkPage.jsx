@@ -1,18 +1,25 @@
 import { useContext } from "react";
 import Layout from "../components/Layout/Layout";
-import FolderPlusIcon from "../assets/folder-plus.svg";
-import SortIcon from "../assets/sort-icon.svg";
-
 import BookmarkCollection from "../components/BookmarkCollection";
 import Form from "../components/Modal/Form";
 import { appContext } from "../context/app-context";
 import useTitle from "../hooks/useTitle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faPlus, faSort } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark,
+  faPlus,
+  faSort,
+  faHands,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function BookmarkPage() {
-  const { bookmark, showModal, addNewCollectionAndSyncBookmark } =
-    useContext(appContext);
+  const {
+    bookmark,
+    showModal,
+    addNewCollectionAndSyncBookmark,
+    deleteAndSyncBookmark,
+  } = useContext(appContext);
 
   useTitle("Bookmark");
 
@@ -31,6 +38,24 @@ export default function BookmarkPage() {
     );
   }
 
+  // Separate doa bookmarks from ayat bookmarks
+  const doaBookmarks = bookmark
+    .flatMap((collection) => collection.lists || [])
+    .filter(
+      (item) =>
+        item.surahNumber && item.surahNumber.toString().startsWith("doa-")
+    );
+
+  const ayatCollections = bookmark.filter((collection) =>
+    collection.lists.some(
+      (item) => !item.surahNumber?.toString().startsWith("doa-")
+    )
+  );
+
+  const hasAnyBookmarks =
+    bookmark.length > 0 &&
+    (doaBookmarks.length > 0 || ayatCollections.length > 0);
+
   return (
     <Layout>
       <div className="px-6 py-4">
@@ -48,7 +73,7 @@ export default function BookmarkPage() {
             </h1>
           </div>
           <p className="text-gray-600 text-sm">
-            Kelola koleksi ayat favorit Anda
+            Kelola koleksi ayat dan doa favorit Anda
           </p>
 
           {/* Islamic decorative line */}
@@ -83,35 +108,100 @@ export default function BookmarkPage() {
           </button>
         </div>
 
-        {/* Bookmark Collections */}
-        {bookmark.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {bookmark.map((item) => (
-              <BookmarkCollection data={item} key={item.collectionId} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gradient-to-r from-emerald-100 to-green-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <FontAwesomeIcon
-                icon={faBookmark}
-                className="text-emerald-400 text-3xl"
-              />
+        {/* Doa Bookmarks Section */}
+        {doaBookmarks.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center">
+                <FontAwesomeIcon
+                  icon={faHands}
+                  className="text-white text-lg"
+                />
+              </div>
+              <h2 className="text-xl font-bold text-gray-800">Doa Tersimpan</h2>
+              <span className="text-sm bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium">
+                {doaBookmarks.length}
+              </span>
             </div>
-            <h3 className="text-gray-600 text-lg font-semibold mb-2">
-              Belum ada bookmark
-            </h3>
-            <p className="text-gray-500 text-sm max-w-sm mx-auto mb-6">
-              Mulai tandai ayat-ayat favorit Anda untuk dibaca kembali nanti
-            </p>
-            <button
-              onClick={handleAddNewCollection}
-              className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-            >
-              Buat Koleksi Pertama
-            </button>
+            <div className="space-y-3">
+              {doaBookmarks.map((doa) => (
+                <div
+                  key={doa.id}
+                  className="group/doa bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-emerald-100/50 hover:shadow-md transition-all duration-300"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3 flex-1">
+                      <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center">
+                        <FontAwesomeIcon
+                          icon={faBookmark}
+                          className="text-white text-sm"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-emerald-700 font-medium">
+                          {doa.surahName}
+                        </p>
+                        <p className="text-gray-600 text-sm line-clamp-1">
+                          {doa.ayah}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => deleteAndSyncBookmark(doa.id, 1)}
+                      className="w-8 h-8 bg-red-50 hover:bg-red-100 rounded-xl flex items-center justify-center transition-colors duration-300 opacity-0 group-hover/doa:opacity-100"
+                    >
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        className="text-red-500 text-sm"
+                      />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
+
+        {/* Bookmark Collections */}
+        <div>
+          {ayatCollections.length > 0 && (
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+              <span>Koleksi Ayat</span>
+              <span className="text-sm bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium">
+                {ayatCollections.length}
+              </span>
+            </h2>
+          )}
+          {ayatCollections.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {ayatCollections.map((item) => (
+                <BookmarkCollection data={item} key={item.collectionId} />
+              ))}
+            </div>
+          ) : !hasAnyBookmarks ? (
+            <div className="text-center py-16">
+              <div className="w-24 h-24 bg-gradient-to-r from-emerald-100 to-green-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <FontAwesomeIcon
+                  icon={faBookmark}
+                  className="text-emerald-400 text-3xl"
+                />
+              </div>
+              <h3 className="text-gray-600 text-lg font-semibold mb-2">
+                Belum ada bookmark
+              </h3>
+              <p className="text-gray-500 text-sm max-w-sm mx-auto mb-6">
+                Mulai tandai ayat-ayat dan doa favorit Anda untuk dibaca kembali
+                nanti
+              </p>
+              <button
+                onClick={handleAddNewCollection}
+                className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                Buat Koleksi Pertama
+              </button>
+            </div>
+          ) : null}
+        </div>
       </div>
     </Layout>
   );

@@ -29,23 +29,35 @@ export default function ModalDialog({
   return createPortal(
     <dialog
       onClose={onClose}
-      className="modal bg-white/95 backdrop-blur-lg rounded-3xl p-6 fixed top-1/8 mx-auto shadow-2xl border border-emerald-100 max-w-md w-full"
+      className="modal bg-white/95 backdrop-blur-lg rounded-3xl overflow-hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-2xl border border-emerald-100 max-w-md w-[90%] p-0"
       ref={modalRef}
     >
       <div className="relative">
-        {/* Islamic corner decorations */}
-        <div className="absolute -top-4 -left-4 opacity-30">
-          <div className="w-4 h-4 border-l-2 border-t-2 border-emerald-400 rounded-tl-2xl"></div>
-        </div>
-        <div className="absolute -top-4 -right-4 opacity-30">
-          <div className="w-4 h-4 border-r-2 border-t-2 border-emerald-400 rounded-tr-2xl"></div>
+        {/* Gradient header */}
+        <div className="bg-gradient-to-r from-emerald-500 to-green-500 px-6 py-4">
+          <div className="flex items-center justify-center h-8">
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-white/70 rounded-full animate-pulse delay-100"></div>
+              <div className="w-2 h-2 bg-white/40 rounded-full animate-pulse delay-200"></div>
+            </div>
+          </div>
         </div>
 
-        {children}
+        {/* Modal content with padding */}
+        <div className="p-6">{children}</div>
 
         {/* Bottom decorative line */}
-        <div className="flex items-center justify-center mt-4">
+        <div className="flex items-center justify-center pb-4">
           <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent"></div>
+        </div>
+
+        {/* Islamic corner decorations */}
+        <div className="absolute top-12 left-3 opacity-20 pointer-events-none">
+          <div className="w-3 h-3 border-l-2 border-t-2 border-emerald-200 rounded-tl-xl"></div>
+        </div>
+        <div className="absolute top-12 right-3 opacity-20 pointer-events-none">
+          <div className="w-3 h-3 border-r-2 border-t-2 border-emerald-200 rounded-tr-xl"></div>
         </div>
       </div>
     </dialog>,

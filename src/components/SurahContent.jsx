@@ -2,6 +2,7 @@ import { useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { appContext } from "../context/app-context";
 import useTitle from "../hooks/useTitle";
+import { playAudioDirect } from "../utils/audioUtils";
 
 import QuranAsset from "../assets/quran.png";
 
@@ -50,17 +51,35 @@ export default function SurahContent({ loadedSurahData }) {
     next = false,
     nextAudio = false
   ) {
-    if (audioRef.current) {
+    if (!audioRef.current) return;
+
+    try {
       if (!next) {
+        if (!src) {
+          console.warn("❌ No audio source provided for playback");
+          return;
+        }
+
+        console.log("🎵 Starting audio playback for ayah", ayahObj.ayahNumber);
         handleActiveAyahChange(ayahObj.ayahNumber, ayahObj.surahNumber);
-        audioRef.current.src = src;
-        audioRef.current.play();
+
+        // Use new playAudioDirect method (handles both direct + blob fallback)
+        const success = await playAudioDirect(audioRef.current, src);
+        if (!success) {
+          console.error("❌ Failed to play audio");
+        }
       } else {
         handleActiveAyahChange(null, null, true);
-        audioRef.current.src = nextAudio.audio[settings.qori];
-        audioRef.current.load();
-        audioRef.current.play();
+        const nextAudioUrl = nextAudio?.audio?.[settings.qori];
+        if (nextAudioUrl) {
+          const success = await playAudioDirect(audioRef.current, nextAudioUrl);
+          if (!success) {
+            console.error("❌ Failed to play next audio");
+          }
+        }
       }
+    } catch (error) {
+      console.error("❌ Unexpected error in ayahAudioPlayEvent:", error);
     }
   }
 
@@ -185,12 +204,18 @@ export default function SurahContent({ loadedSurahData }) {
                           [&::-webkit-media-controls-volume-slider]:accent-emerald-500
                           [&::-webkit-media-controls-mute-button]:text-emerald-600
                           hover:bg-emerald-50/30 transition-colors duration-300"
-                  src={null}
                   ref={audioRef}
                   controls
+                  controlsList="nodownload"
                   onEnded={(event) => {
                     handleAyahPlayedEnded(event, loadedSurahData);
                   }}
+                  onError={(e) => {
+                    console.error("Audio element error:", e);
+                    console.log("Error code:", audioRef.current?.error?.code);
+                  }}
+                  onLoadStart={() => console.log("Audio load started")}
+                  onCanPlay={() => console.log("Audio can play")}
                 />
 
                 {/* Islamic decorative bottom border */}

@@ -12,13 +12,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { getRandomVerse } from "../data/inspirationalVerses";
+import { getLastReadSurah } from "../helper/local-storage-helper";
 
 export default function Homepage() {
   const [currentVerse, setCurrentVerse] = useState(null);
+  const [lastRead, setLastRead] = useState(null);
 
   // Initialize with random verse on component mount (every page refresh)
   useEffect(() => {
     setCurrentVerse(getRandomVerse());
+    const lastReadData = getLastReadSurah();
+    setLastRead(lastReadData);
   }, []);
   const menuItems = [
     {
@@ -100,7 +104,11 @@ export default function Homepage() {
             title="Terakhir Dibaca"
             description="Lanjutkan bacaan Al-Qur'an Anda"
             icon={faBookmark}
-            link="/list-surah"
+            link={
+              lastRead
+                ? `/surah/${lastRead.surahNumber}/${lastRead.ayah}`
+                : "/list-surah"
+            }
             gradient="from-amber-500 to-orange-500"
             size="wide"
           />

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Layout from "../components/Layout/Layout";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,12 +10,31 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useTitle from "../hooks/useTitle";
 import { convertToArabicNumerals } from "../utils/arabicNumbers";
+import { appContext } from "../context/app-context";
 
 export default function DoaPage() {
   const [doaList, setDoaList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [bookmarkedDoas, setBookmarkedDoas] = useState([]);
+  const { showModal, bookmark, saveAndSyncBookmark, deleteAndSyncBookmark } =
+    useContext(appContext);
 
   useTitle("Doa Rutin 13");
+
+  // Sync bookmarked doas from bookmark context
+  useEffect(() => {
+    if (bookmark && bookmark.length > 0) {
+      // Get all doa bookmarks from default collection
+      const doaBookmarks = bookmark
+        .flatMap((collection) => collection.lists || [])
+        .filter(
+          (item) =>
+            item.surahNumber && item.surahNumber.toString().startsWith("doa-")
+        )
+        .map((item) => item.surahNumber);
+      setBookmarkedDoas(doaBookmarks);
+    }
+  }, [bookmark]);
 
   useEffect(() => {
     const loadDoaData = async () => {
@@ -58,8 +77,58 @@ export default function DoaPage() {
       });
     } else {
       navigator.clipboard.writeText(shareText);
-      // Bisa tambahkan notifikasi toast di sini
+      alert("Teks doa telah disalin ke clipboard");
     }
+  };
+
+  const handleBookmarkDoa = (doa) => {
+    const doaId = `doa-${doa.nomor_doa}`;
+    const isBookmarked = bookmarkedDoas.includes(doaId);
+    const collectionId = 1; // Default collection
+
+    let message;
+
+    if (isBookmarked) {
+      // Remove bookmark - find and delete it
+      const bookmarkId = `${collectionId}@${doaId}-doa`;
+      deleteAndSyncBookmark(bookmarkId, collectionId);
+      setBookmarkedDoas(bookmarkedDoas.filter((id) => id !== doaId));
+      message = `Doa ${convertToArabicNumerals(
+        doa.nomor_doa
+      )} dihapus dari bookmark`;
+    } else {
+      // Add bookmark
+      const result = saveAndSyncBookmark(
+        doaId,
+        `Doa ${convertToArabicNumerals(doa.nomor_doa)}`,
+        doa.text_arab,
+        collectionId
+      );
+      if (!result.error) {
+        setBookmarkedDoas([...bookmarkedDoas, doaId]);
+        message = result.message;
+      } else {
+        message = result.message;
+      }
+    }
+
+    // Show notification
+    showModal(
+      <div className="p-6 text-center">
+        <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <FontAwesomeIcon
+            icon={faBookmark}
+            className="text-emerald-600 text-2xl"
+          />
+        </div>
+        <p className="text-gray-800 font-medium">{message}</p>
+      </div>,
+      true
+    );
+  };
+
+  const isDoaBookmarked = (doaId) => {
+    return bookmarkedDoas.includes(`doa-${doaId}`);
   };
 
   if (loading) return <LoadingIndicator />;
@@ -101,6 +170,8 @@ export default function DoaPage() {
               key={doa.nomor_doa}
               doaData={doa}
               onShare={() => handleShareDoa(doa)}
+              onBookmark={() => handleBookmarkDoa(doa)}
+              isBookmarked={isDoaBookmarked(doa.nomor_doa)}
             />
           ))}
         </div>
@@ -110,7 +181,7 @@ export default function DoaPage() {
 }
 
 // Component untuk setiap item doa
-function DoaItem({ doaData, onShare }) {
+function DoaItem({ doaData, onShare, onBookmark, isBookmarked }) {
   return (
     <div className="relative group doa-item mx-4 mt-6 mb-4 bg-white/70 backdrop-blur-sm rounded-3xl border border-emerald-100 shadow-md p-6 hover:shadow-lg transition-all duration-300">
       {/* Islamic corner decorations */}
@@ -151,10 +222,18 @@ function DoaItem({ doaData, onShare }) {
 
           {/* Bookmark Button */}
           <button
-            className="w-10 h-10 bg-amber-100/40 hover:bg-amber-200/60 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105"
-            title="Simpan doa"
+            onClick={onBookmark}
+            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 ${
+              isBookmarked
+                ? "bg-amber-500 hover:bg-amber-600"
+                : "bg-amber-100/40 hover:bg-amber-200/60"
+            }`}
+            title={isBookmarked ? "Hapus dari bookmark" : "Simpan ke bookmark"}
           >
-            <FontAwesomeIcon icon={faBookmark} className="text-amber-600/70" />
+            <FontAwesomeIcon
+              icon={faBookmark}
+              className={isBookmarked ? "text-white" : "text-amber-600/70"}
+            />
           </button>
         </div>
       </div>
