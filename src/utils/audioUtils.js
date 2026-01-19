@@ -12,81 +12,115 @@ export async function playAudioDirect(audioElement, audioUrl) {
     return false;
   }
 
+  console.log("=== 🎵 playAudioDirect called ===");
+  console.log("Original URL:", audioUrl.substring(0, 80) + "...");
+
   try {
-    console.log(
-      "🎵 Attempting direct playback from:",
-      audioUrl.substring(0, 80) + "..."
-    );
+    // Clean slate - pause and reset
+    audioElement.pause();
+    audioElement.currentTime = 0;
+    audioElement.src = "";
 
-    // Method 1: Direct play (fastest)
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Set the source
+    audioElement.src = audioUrl;
+    audioElement.volume = 1;
+    audioElement.crossOrigin = "anonymous";
+
+    console.log("📡 Audio element ready");
+
+    // Try direct play
     try {
-      audioElement.pause();
-      audioElement.currentTime = 0;
-      audioElement.src = "";
-
-      // Delay to ensure clean state
-      await new Promise((resolve) => setTimeout(resolve, 50));
-
-      audioElement.src = audioUrl;
-      audioElement.volume = 1;
-
-      console.log("📡 Audio element state:", {
-        src: audioElement.src.substring(0, 80),
-        readyState: audioElement.readyState,
-        networkState: audioElement.networkState,
-      });
-
       const playPromise = audioElement.play();
       if (playPromise !== undefined) {
         await playPromise;
-        console.log("✅ Direct playback successful!");
+        console.log("✅ Audio playing!");
         return true;
       }
-    } catch (directError) {
-      console.warn("⚠️ Direct playback failed:", directError.message);
-      console.log("Trying blob URL method...");
+    } catch (playError) {
+      console.warn("⚠️ Direct play failed:", playError.message);
+      console.warn("Error name:", playError.name);
 
-      // Method 2: Blob URL (for CORS issues)
-      try {
-        const response = await fetch(audioUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
+      // Try with CORS proxy services
+      console.log("🔄 Trying CORS proxy methods...");
+
+      // List of CORS proxies to try (local proxy first, then external services)
+      const corsProxies = [
+        // Local dev proxy via Vite
+        (url) => url.replace("https://cdn.alquran.cloud", "/audio-proxy"),
+        // cors-anywhere
+        (url) => `https://cors-anywhere.herokuapp.com/${url}`,
+        // allorigins
+        (url) =>
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        // thingproxy
+        (url) => `https://thingproxy.freehostia.com/fetch/${url}`,
+      ];
+
+      let success = false;
+      for (let i = 0; i < corsProxies.length && !success; i++) {
+        try {
+          const proxiedUrl = corsProxies[i](audioUrl);
+          console.log(`📥 Attempt ${i + 1}: Trying CORS proxy...`);
+          console.log(`   URL: ${proxiedUrl.substring(0, 80)}...`);
+
+          const response = await fetch(proxiedUrl, {
+            headers: {
+              Accept: "audio/*",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          console.log(
+            `✅ Blob created via proxy ${i + 1}:`,
+            blob.size,
+            "bytes, type:",
+            blob.type
+          );
+
+          audioElement.pause();
+          audioElement.currentTime = 0;
+          audioElement.src = blobUrl;
+          audioElement.crossOrigin = "anonymous";
+
+          const playPromise2 = audioElement.play();
+          if (playPromise2 !== undefined) {
+            await playPromise2;
+          }
+
+          console.log(`✅ Blob playback successful via proxy ${i + 1}!`);
+
+          // Cleanup
+          audioElement.addEventListener(
+            "ended",
+            () => {
+              URL.revokeObjectURL(blobUrl);
+              console.log("🧹 Blob URL cleaned up");
+            },
+            { once: true }
+          );
+
+          success = true;
+          return true;
+        } catch (proxyError) {
+          console.warn(`⚠️ Proxy ${i + 1} failed:`, proxyError.message);
+          // Continue to next proxy
         }
+      }
 
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-
-        console.log("✅ Blob created, size:", blob.size, "bytes");
-
-        audioElement.pause();
-        audioElement.currentTime = 0;
-        audioElement.src = blobUrl;
-        audioElement.volume = 1;
-
-        const playPromise = audioElement.play();
-        if (playPromise !== undefined) {
-          await playPromise;
-        }
-
-        console.log("✅ Blob URL playback successful!");
-
-        // Cleanup blob URL when done
-        audioElement.addEventListener(
-          "ended",
-          () => {
-            URL.revokeObjectURL(blobUrl);
-          },
-          { once: true }
-        );
-
-        return true;
-      } catch (blobError) {
-        console.error("❌ Blob URL method also failed:", blobError.message);
+      if (!success) {
+        console.error("❌ All CORS proxy attempts failed");
         return false;
       }
     }
   } catch (error) {
-    console.error("❌ Unexpected error in playAudioDirect:", error.message);
+    console.error("❌ Error in playAudioDirect:", error.message);
     return false;
   }
 }
@@ -234,6 +268,31 @@ export function getAudioUrl(ayahData, qoriId) {
   }
 
   return url;
+}
+
+/**
+ * Convert CDN URL to local proxy URL for development
+ * Only works in dev environment with Vite proxy configured
+ */
+export function getProxyUrlIfDev(audioUrl) {
+  if (!audioUrl) return audioUrl;
+
+  // Only use proxy in development
+  if (import.meta.env.DEV) {
+    // If it's a cdn.alquran.cloud URL, proxy it
+    if (audioUrl.includes("cdn.alquran.cloud")) {
+      const proxiedUrl = audioUrl.replace(
+        "https://cdn.alquran.cloud",
+        "/audio-proxy"
+      );
+      console.log("🔄 Using dev proxy for audio URL");
+      console.log("   Original:", audioUrl.substring(0, 60));
+      console.log("   Proxied:", proxiedUrl);
+      return proxiedUrl;
+    }
+  }
+
+  return audioUrl;
 }
 
 export function validateAudioUrl(url) {

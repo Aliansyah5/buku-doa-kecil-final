@@ -47,5 +47,14 @@ export default defineConfig({
   server: {
     https: true,
     port: 5173,
+    proxy: {
+      "/audio-proxy": {
+        target: "https://cdn.alquran.cloud",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/audio-proxy/, ""),
+        secure: false,
+        ws: false,
+      },
+    },
   },
 });

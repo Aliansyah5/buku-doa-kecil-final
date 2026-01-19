@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Playback Test</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      .container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .description {
+        color: #666;
+        margin-bottom: 30px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        color: #333;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+      input[type="text"],
+      input[type="url"] {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+      input[type="text"]:focus,
+      input[type="url"]:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+      button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-primary {
+        background: #667eea;
+        color: white;
+        flex: 1;
+      }
+      .btn-primary:hover {
+        background: #5568d3;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+      .btn-danger {
+        background: #f56565;
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #e53e3e;
+      }
+      .console {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: "Monaco", "Courier New", monospace;
+        font-size: 12px;
+        max-height: 400px;
+        overflow-y: auto;
+        margin-top: 20px;
+      }
+      .console-line {
+        margin-bottom: 8px;
+      }
+      .console-info {
+        color: #4ec9b0;
+      }
+      .console-success {
+        color: #4ec9b0;
+      }
+      .console-warn {
+        color: #dcdcaa;
+      }
+      .console-error {
+        color: #f48771;
+      }
+      .audio-player {
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid #e0e0e0;
+      }
+      audio {
+        width: 100%;
+        margin-top: 15px;
+      }
+      .status {
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .status-loading {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+      .status-success {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .status-error {
+        background: #ffebee;
+        color: #c62828;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎵 Audio Playback Test Tool</h1>
+      <p class="description">
+        Tool untuk testing dan debugging audio playback dari Qur'an API
+      </p>
+
+      <div id="status"></div>
+
+      <div class="form-group">
+        <label for="audioUrl">Audio URL:</label>
+        <input
+          type="url"
+          id="audioUrl"
+          placeholder="Paste audio URL here..."
+          value="https://cdn.alquran.cloud/media/audio/ar.alafasy/1.mp3"
+        />
+      </div>
+
+      <div class="button-group">
+        <button class="btn-primary" onclick="playAudio()">▶️ Play</button>
+        <button class="btn-danger" onclick="stopAudio()">⏹️ Stop</button>
+        <button class="btn-primary" onclick="testFetch()">🔍 Test Fetch</button>
+      </div>
+
+      <div class="audio-player">
+        <h3>Audio Player:</h3>
+        <audio id="audioPlayer" controls controlsList="nodownload"></audio>
+      </div>
+
+      <div class="console">
+        <div id="console-output"></div>
+      </div>
+    </div>
+
+    <script>
+      const audioPlayer = document.getElementById("audioPlayer");
+      const statusDiv = document.getElementById("status");
+      const consoleOutput = document.getElementById("console-output");
+
+      function log(message, type = "info") {
+        const line = document.createElement("div");
+        line.className = `console-line console-${type}`;
+        line.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+        consoleOutput.appendChild(line);
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        console.log(`[${type.toUpperCase()}]`, message);
+      }
+
+      function showStatus(message, type = "info") {
+        statusDiv.textContent = message;
+        statusDiv.className = `status status-${type}`;
+      }
+
+      async function playAudio() {
+        const url = document.getElementById("audioUrl").value;
+        if (!url) {
+          showStatus("❌ Please enter audio URL", "error");
+          return;
+        }
+
+        showStatus("🔄 Loading...", "loading");
+        log("Starting audio playback...", "info");
+
+        try {
+          audioPlayer.pause();
+          audioPlayer.currentTime = 0;
+          audioPlayer.src = "";
+
+          await new Promise((resolve) => setTimeout(resolve, 50));
+
+          audioPlayer.src = url;
+          audioPlayer.volume = 1;
+
+          log(`Setting src: ${url.substring(0, 60)}...`, "info");
+
+          const playPromise = audioPlayer.play();
+          if (playPromise !== undefined) {
+            await playPromise;
+            showStatus("✅ Audio playing!", "success");
+            log("✅ Audio playing successfully!", "success");
+          }
+        } catch (error) {
+          log(`⚠️ Direct play failed: ${error.message}`, "warn");
+
+          // Try blob fallback
+          log("Trying blob URL fallback...", "warn");
+          try {
+            const response = await fetch(url);
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}`);
+            }
+
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+
+            log(`✅ Blob created: ${blob.size} bytes`, "success");
+
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            audioPlayer.src = blobUrl;
+
+            const playPromise = audioPlayer.play();
+            if (playPromise !== undefined) {
+              await playPromise;
+            }
+
+            showStatus("✅ Blob playback successful!", "success");
+            log("✅ Blob URL playback successful!", "success");
+
+            audioPlayer.addEventListener(
+              "ended",
+              () => {
+                URL.revokeObjectURL(blobUrl);
+              },
+              { once: true }
+            );
+          } catch (blobError) {
+            showStatus(`❌ Error: ${blobError.message}`, "error");
+            log(`❌ Blob fallback also failed: ${blobError.message}`, "error");
+          }
+        }
+      }
+
+      function stopAudio() {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        showStatus("⏹️ Stopped", "info");
+        log("Audio stopped", "info");
+      }
+
+      async function testFetch() {
+        const url = document.getElementById("audioUrl").value;
+        if (!url) {
+          showStatus("❌ Please enter audio URL", "error");
+          return;
+        }
+
+        showStatus("🔄 Testing fetch...", "loading");
+        log(`Testing fetch for: ${url.substring(0, 60)}...`, "info");
+
+        try {
+          const startTime = Date.now();
+          const response = await fetch(url);
+          const duration = Date.now() - startTime;
+
+          log(`✅ Fetch successful (${duration}ms)`, "success");
+          log(`Status: ${response.status} ${response.statusText}`, "info");
+          log(`Content-Type: ${response.headers.get("content-type")}`, "info");
+          log(
+            `Content-Length: ${response.headers.get("content-length")} bytes`,
+            "info"
+          );
+
+          const blob = await response.blob();
+          log(`Blob size: ${blob.size} bytes`, "success");
+
+          showStatus(
+            `✅ Fetch test passed! Size: ${formatBytes(blob.size)}`,
+            "success"
+          );
+        } catch (error) {
+          log(`❌ Fetch failed: ${error.message}`, "error");
+          showStatus(`❌ Fetch error: ${error.message}`, "error");
+        }
+      }
+
+      function formatBytes(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (
+          Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i]
+        );
+      }
+
+      // Event listeners
+      audioPlayer.addEventListener("play", () => {
+        log("▶️ Audio started", "info");
+      });
+
+      audioPlayer.addEventListener("pause", () => {
+        log("⏸️ Audio paused", "info");
+      });
+
+      audioPlayer.addEventListener("ended", () => {
+        log("⏹️ Audio ended", "info");
+      });
+
+      audioPlayer.addEventListener("error", (e) => {
+        log(`❌ Audio error: ${e.target.error?.message}`, "error");
+      });
+
+      audioPlayer.addEventListener("loadstart", () => {
+        log("🔄 Loading started...", "warn");
+      });
+
+      audioPlayer.addEventListener("canplay", () => {
+        log("✅ Can play", "success");
+      });
+
+      log("Audio Test Tool Ready", "success");
+    </script>
+  </body>
+</html>

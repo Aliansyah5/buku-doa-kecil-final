@@ -51,7 +51,21 @@ export default function SurahContent({ loadedSurahData }) {
     next = false,
     nextAudio = false
   ) {
-    if (!audioRef.current) return;
+    console.log("=== 🎵 ayahAudioPlayEvent CALLED ===");
+    console.log("Parameters received:");
+    console.log("  src:", src);
+    console.log("  ayahObj:", ayahObj);
+    console.log("  next:", next);
+    console.log("  nextAudio:", nextAudio);
+    console.log("  audioRef.current:", audioRef.current);
+    console.log("====================================");
+
+    if (!audioRef.current) {
+      console.error(
+        "❌ FATAL: audioRef.current is still null! Audio element not mounted."
+      );
+      return;
+    }
 
     try {
       if (!next) {
@@ -63,8 +77,16 @@ export default function SurahContent({ loadedSurahData }) {
         console.log("🎵 Starting audio playback for ayah", ayahObj.ayahNumber);
         handleActiveAyahChange(ayahObj.ayahNumber, ayahObj.surahNumber);
 
+        // Small delay to ensure audio element state is updated
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        console.log(
+          "Calling playAudioDirect with audioRef and src:",
+          src.substring(0, 80)
+        );
         // Use new playAudioDirect method (handles both direct + blob fallback)
         const success = await playAudioDirect(audioRef.current, src);
+        console.log("playAudioDirect returned:", success);
         if (!success) {
           console.error("❌ Failed to play audio");
         }
@@ -72,6 +94,8 @@ export default function SurahContent({ loadedSurahData }) {
         handleActiveAyahChange(null, null, true);
         const nextAudioUrl = nextAudio?.audio?.[settings.qori];
         if (nextAudioUrl) {
+          // Small delay before playing next audio
+          await new Promise((resolve) => setTimeout(resolve, 100));
           const success = await playAudioDirect(audioRef.current, nextAudioUrl);
           if (!success) {
             console.error("❌ Failed to play next audio");
@@ -82,7 +106,6 @@ export default function SurahContent({ loadedSurahData }) {
       console.error("❌ Unexpected error in ayahAudioPlayEvent:", error);
     }
   }
-
   function handleAyahPlayedEnded(event, loadedSurahData) {
     event.target.src = null;
     if (activeAyah.ayahNumber + 1 > loadedSurahData.ayat.length) {
@@ -136,6 +159,39 @@ export default function SurahContent({ loadedSurahData }) {
 
         <div className="fixed bottom-20 md:bottom-28 lg:bottom-20 left-0 right-0 mx-auto w-full px-3 z-40">
           <div className="max-w-xl mx-auto relative">
+            {/* Audio Element - ALWAYS in DOM, not conditional */}
+            <audio
+              className="w-full h-12 bg-transparent outline-none
+                      [&::-webkit-media-controls-panel]:bg-transparent
+                      [&::-webkit-media-controls-current-time-display]:text-emerald-700
+                      [&::-webkit-media-controls-current-time-display]:font-medium
+                      [&::-webkit-media-controls-time-remaining-display]:text-emerald-700
+                      [&::-webkit-media-controls-time-remaining-display]:font-medium
+                      [&::-webkit-media-controls-timeline]:bg-emerald-100
+                      [&::-webkit-media-controls-timeline]:rounded-full
+                      [&::-webkit-media-controls-timeline]:h-1
+                      [&::-webkit-media-controls-play-button]:bg-emerald-500
+                      [&::-webkit-media-controls-play-button]:rounded-full
+                      [&::-webkit-media-controls-play-button]:text-white
+                      [&::-webkit-media-controls-play-button]:shadow-md
+                      [&::-webkit-media-controls-volume-slider]:accent-emerald-500
+                      [&::-webkit-media-controls-mute-button]:text-emerald-600
+                      hover:bg-emerald-50/30 transition-colors duration-300
+                      ${activeAyah.ayahNumber ? 'block' : 'hidden'}"
+              ref={audioRef}
+              controls
+              controlsList="nodownload"
+              onEnded={(event) => {
+                handleAyahPlayedEnded(event, loadedSurahData);
+              }}
+              onError={(e) => {
+                console.error("Audio element error:", e);
+                console.log("Error code:", audioRef.current?.error?.code);
+              }}
+              onLoadStart={() => console.log("Audio load started")}
+              onCanPlay={() => console.log("Audio can play")}
+            />
+
             {activeAyah.ayahNumber && (
               <div className="bg-white/95 backdrop-blur-lg shadow-xl rounded-2xl border border-emerald-100 overflow-hidden">
                 {/* Header with close button */}
@@ -185,38 +241,6 @@ export default function SurahContent({ loadedSurahData }) {
                     </button>
                   </div>
                 </div>
-
-                {/* Audio Element */}
-                <audio
-                  className="w-full h-12 bg-transparent outline-none
-                          [&::-webkit-media-controls-panel]:bg-transparent
-                          [&::-webkit-media-controls-current-time-display]:text-emerald-700
-                          [&::-webkit-media-controls-current-time-display]:font-medium
-                          [&::-webkit-media-controls-time-remaining-display]:text-emerald-700
-                          [&::-webkit-media-controls-time-remaining-display]:font-medium
-                          [&::-webkit-media-controls-timeline]:bg-emerald-100
-                          [&::-webkit-media-controls-timeline]:rounded-full
-                          [&::-webkit-media-controls-timeline]:h-1
-                          [&::-webkit-media-controls-play-button]:bg-emerald-500
-                          [&::-webkit-media-controls-play-button]:rounded-full
-                          [&::-webkit-media-controls-play-button]:text-white
-                          [&::-webkit-media-controls-play-button]:shadow-md
-                          [&::-webkit-media-controls-volume-slider]:accent-emerald-500
-                          [&::-webkit-media-controls-mute-button]:text-emerald-600
-                          hover:bg-emerald-50/30 transition-colors duration-300"
-                  ref={audioRef}
-                  controls
-                  controlsList="nodownload"
-                  onEnded={(event) => {
-                    handleAyahPlayedEnded(event, loadedSurahData);
-                  }}
-                  onError={(e) => {
-                    console.error("Audio element error:", e);
-                    console.log("Error code:", audioRef.current?.error?.code);
-                  }}
-                  onLoadStart={() => console.log("Audio load started")}
-                  onCanPlay={() => console.log("Audio can play")}
-                />
 
                 {/* Islamic decorative bottom border */}
                 <div className="flex items-center justify-center py-2">

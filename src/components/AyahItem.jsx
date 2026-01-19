@@ -10,6 +10,7 @@ import {
 
 import { saveLastReadSurah } from "../helper/local-storage-helper";
 import { appContext } from "../context/app-context";
+import { getProxyUrlIfDev } from "../utils/audioUtils";
 import Notification from "./Modal/Notification";
 import Confirmation from "./Modal/Confirmation";
 import ShareAyah from "./ShareAyah";
@@ -51,13 +52,14 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
 
   function handleClick() {
     const audioUrl = ayahData.audio?.[settings.qori];
-    console.log("=== AUDIO DEBUG ===");
+    console.log("=== 🎵 AUDIO PLAY CLICK DEBUG ===");
     console.log("Settings qori:", settings.qori);
     console.log("Ayah number:", ayahData.nomorAyat);
     console.log("Available audio keys:", Object.keys(ayahData.audio || {}));
     console.log("Audio URL:", audioUrl);
     console.log("Full audio object:", ayahData.audio);
-    console.log("==================");
+    console.log("Full ayahData:", ayahData);
+    console.log("=========================================");
 
     if (!audioUrl) {
       console.warn(
@@ -73,10 +75,28 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
     }
 
     console.log("✅ Playing audio with URL:", audioUrl);
-    onPlayAudio(audioUrl, {
+    console.log("Calling onPlayAudio with parameters:");
+    console.log("  - src:", audioUrl);
+    console.log("  - ayahObj:", {
       ayahNumber: ayahData.nomorAyat,
       surahNumber: number,
     });
+    console.log("  - next: false");
+    console.log("  - nextAudio: false");
+
+    // Use proxy URL in dev environment
+    const audioUrlToUse = getProxyUrlIfDev(audioUrl);
+
+    // Call immediately - audio element is always in DOM now
+    onPlayAudio(
+      audioUrlToUse, // src (may be proxied in dev)
+      {
+        ayahNumber: ayahData.nomorAyat, // ayahObj
+        surahNumber: number,
+      },
+      false, // next
+      false // nextAudio
+    );
   }
 
   function handleLastReadClick() {
