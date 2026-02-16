@@ -31,11 +31,11 @@ export default function AsmaulHusnaPage() {
 
   if (loading) return <LoadingIndicator />;
 
-  // Split names into groups of 4 and reverse each group (right to left layout)
+  // Split names into groups of 4 (no reverse - keep correct order)
   const groupedNames = [];
   for (let i = 0; i < asmaulHusna.length; i += 4) {
     const group = asmaulHusna.slice(i, i + 4);
-    groupedNames.push(group.reverse());
+    groupedNames.push(group);
   }
 
   return (

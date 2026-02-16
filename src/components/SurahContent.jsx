@@ -2,7 +2,6 @@ import { useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { appContext } from "../context/app-context";
 import useTitle from "../hooks/useTitle";
-import { playAudioDirect } from "../utils/audioUtils";
 
 import QuranAsset from "../assets/quran.png";
 
@@ -49,61 +48,41 @@ export default function SurahContent({ loadedSurahData }) {
     src,
     ayahObj,
     next = false,
-    nextAudio = false
+    nextAudio = false,
   ) {
-    console.log("=== 🎵 ayahAudioPlayEvent CALLED ===");
-    console.log("Parameters received:");
-    console.log("  src:", src);
-    console.log("  ayahObj:", ayahObj);
-    console.log("  next:", next);
-    console.log("  nextAudio:", nextAudio);
-    console.log("  audioRef.current:", audioRef.current);
-    console.log("====================================");
-
     if (!audioRef.current) {
-      console.error(
-        "❌ FATAL: audioRef.current is still null! Audio element not mounted."
-      );
+      console.error("❌ Audio element not mounted.");
       return;
     }
 
     try {
       if (!next) {
         if (!src) {
-          console.warn("❌ No audio source provided for playback");
+          console.warn("❌ No audio source provided");
           return;
         }
 
-        console.log("🎵 Starting audio playback for ayah", ayahObj.ayahNumber);
+        console.log("🎵 Playing audio from CDN:", src);
         handleActiveAyahChange(ayahObj.ayahNumber, ayahObj.surahNumber);
 
-        // Small delay to ensure audio element state is updated
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        // Simple direct playback - no proxy needed!
+        // <audio> element works without CORS headers
+        audioRef.current.src = src;
+        await audioRef.current.play();
 
-        console.log(
-          "Calling playAudioDirect with audioRef and src:",
-          src.substring(0, 80)
-        );
-        // Use new playAudioDirect method (handles both direct + blob fallback)
-        const success = await playAudioDirect(audioRef.current, src);
-        console.log("playAudioDirect returned:", success);
-        if (!success) {
-          console.error("❌ Failed to play audio");
-        }
+        console.log("✅ Audio playing");
       } else {
         handleActiveAyahChange(null, null, true);
         const nextAudioUrl = nextAudio?.audio?.[settings.qori];
         if (nextAudioUrl) {
-          // Small delay before playing next audio
           await new Promise((resolve) => setTimeout(resolve, 100));
-          const success = await playAudioDirect(audioRef.current, nextAudioUrl);
-          if (!success) {
-            console.error("❌ Failed to play next audio");
-          }
+          audioRef.current.src = nextAudioUrl;
+          await audioRef.current.play();
+          console.log("✅ Next audio playing");
         }
       }
     } catch (error) {
-      console.error("❌ Unexpected error in ayahAudioPlayEvent:", error);
+      console.error("❌ Playback error:", error);
     }
   }
   function handleAyahPlayedEnded(event, loadedSurahData) {
@@ -117,7 +96,7 @@ export default function SurahContent({ loadedSurahData }) {
         null,
         true,
         loadedSurahData.ayat[activeAyah.ayahNumber],
-        loadedSurahData.ayat.length
+        loadedSurahData.ayat.length,
       );
     }, 1000);
     return () => clearTimeout(timeout);

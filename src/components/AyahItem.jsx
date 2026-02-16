@@ -10,7 +10,6 @@ import {
 
 import { saveLastReadSurah } from "../helper/local-storage-helper";
 import { appContext } from "../context/app-context";
-import { getProxyUrlIfDev } from "../utils/audioUtils";
 import Notification from "./Modal/Notification";
 import Confirmation from "./Modal/Confirmation";
 import ShareAyah from "./ShareAyah";
@@ -52,50 +51,31 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
 
   function handleClick() {
     const audioUrl = ayahData.audio?.[settings.qori];
-    console.log("=== 🎵 AUDIO PLAY CLICK DEBUG ===");
-    console.log("Settings qori:", settings.qori);
-    console.log("Ayah number:", ayahData.nomorAyat);
-    console.log("Available audio keys:", Object.keys(ayahData.audio || {}));
-    console.log("Audio URL:", audioUrl);
-    console.log("Full audio object:", ayahData.audio);
-    console.log("Full ayahData:", ayahData);
-    console.log("=========================================");
 
     if (!audioUrl) {
       console.warn(
-        `❌ Audio not available for qori ${settings.qori} in ayah ${ayahData.nomorAyat}. Available keys:`,
-        Object.keys(ayahData.audio || {})
+        `❌ Audio not available for qori ${settings.qori} in ayah ${ayahData.nomorAyat}`,
       );
       alert(
         `Audio not available for this qori. Available: ${Object.keys(
-          ayahData.audio || {}
-        ).join(", ")}`
+          ayahData.audio || {},
+        ).join(", ")}`,
       );
       return;
     }
 
-    console.log("✅ Playing audio with URL:", audioUrl);
-    console.log("Calling onPlayAudio with parameters:");
-    console.log("  - src:", audioUrl);
-    console.log("  - ayahObj:", {
-      ayahNumber: ayahData.nomorAyat,
-      surahNumber: number,
-    });
-    console.log("  - next: false");
-    console.log("  - nextAudio: false");
+    console.log("🎵 Playing audio directly from CDN:", audioUrl);
 
-    // Use proxy URL in dev environment
-    const audioUrlToUse = getProxyUrlIfDev(audioUrl);
-
-    // Call immediately - audio element is always in DOM now
+    // Direct CDN playback - no proxy needed!
+    // HTML5 <audio> element works without CORS headers
     onPlayAudio(
-      audioUrlToUse, // src (may be proxied in dev)
+      audioUrl, // Direct CDN URL
       {
-        ayahNumber: ayahData.nomorAyat, // ayahObj
+        ayahNumber: ayahData.nomorAyat,
         surahNumber: number,
       },
       false, // next
-      false // nextAudio
+      false, // nextAudio
     );
   }
 
@@ -105,10 +85,10 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
       <Notification
         title="Berhasil"
         message={`${surahName} ayat ${formatAyahNumber(
-          ayahData.nomorAyat
+          ayahData.nomorAyat,
         )} berhasil ditandai sebagai 'terakhir dibaca'`}
       />,
-      true
+      true,
     );
   }
 
@@ -150,7 +130,7 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
             number,
             surahName,
             ayahData.nomorAyat,
-            seletedCollectionIdRef.current.value
+            seletedCollectionIdRef.current.value,
           );
 
           closeModal(() => {
@@ -159,11 +139,11 @@ export default function AyahItem({ ayahData, onPlayAudio, playStatus }) {
                 title={error ? "Gagal" : "Berhasil"}
                 message={message}
               />,
-              true
+              true,
             );
           });
         }}
-      />
+      />,
     );
   }
 
