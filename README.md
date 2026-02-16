@@ -151,19 +151,4 @@ Jika Anda menemukan bug atau memiliki ide untuk fitur baru, silahkan ajukan di m
 
 ## Acknowledgments
 
-Terima kasih kepada:
-
-- Allah SWT atas segala kemudahan dan berkah
-- [Muhammad Syifa](https://github.com/emsifa/) untuk inspirasi proyek
-- [Tanvir Ahassan](https://www.figma.com/@tanvirux) untuk desain UI yang indah
-- Tim [equran.id](https://equran.id/) untuk API Al-Quran yang lengkap
-- Komunitas open source yang telah berkontribusi pada libraries yang digunakan
-
-## Contact & Support
-
-- **Kontak Telegram**: [@taufiq_h](https://t.me/taufiq_h)
-- **GitHub**: [@taufiq33](https://github.com/taufiq33)
-- **Project Link**: [https://github.com/taufiq33/quran-frontend](https://github.com/taufiq33/quran-frontend)
-- **Live Demo**: [https://quran-frontend-zeta.vercel.app/](https://quran-frontend-zeta.vercel.app/)
-
 ---

@@ -7,6 +7,8 @@ import SettingPage from "./pages/SettingPage";
 import ErrorPage from "./pages/ErrorPage";
 import DoaPage from "./pages/DoaPage";
 import DzikirPage from "./pages/DzikirPage";
+import AsmaulHusnaPage from "./pages/AsmaulHusnaPage";
+import DzikirCounterPage from "./pages/DzikirCounterPage";
 import MasjidPage from "./pages/MasjidPage";
 import SearchPage from "./pages/SearchPage";
 import AppContextProvider from "./provider/AppProvider";
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
         element: <DzikirPage />,
       },
       {
+        path: "asmaul-husna",
+        element: <AsmaulHusnaPage />,
+      },
+      {
+        path: "dzikir-counter",
+        element: <DzikirCounterPage />,
+      },
+      {
         path: "masjid",
         element: <MasjidPage />,
       },
@@ -82,7 +92,7 @@ function App() {
           collectionName: "My Favorite",
           lists: [],
         },
-      ])
+      ]),
     );
   }
 
@@ -98,7 +108,7 @@ function App() {
         qori: "05",
         lokasi: "1425",
         autoLastReadOnVisitedSurah: false,
-      })
+      }),
     );
   }
 

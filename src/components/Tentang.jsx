@@ -74,18 +74,18 @@ export default function Tentang() {
           gradient="from-emerald-500 to-green-600"
         >
           <div className="space-y-2">
-            <p className="font-semibold text-gray-800">Taufiq Hidayat</p>
+            <p className="font-semibold text-gray-800">Ibrahim Aliansyah</p>
             <div className="flex flex-col space-y-1.5">
-              <LinkItem
-                href="https://t.me/taufiq_h"
+              {/* <LinkItem
+                href="https://t.me/ibrahim_aliansyah"
                 icon={faTelegram}
-                text="@taufiq_h"
+                text="@ibrahim_aliansyah"
                 color="blue"
-              />
+              /> */}
               <LinkItem
-                href="mailto:taufiqqhidayatt@gmail.com"
+                href="mailto:ibrahimaliansyah5@gmail.com"
                 icon={faEnvelope}
-                text="taufiqqhidayatt@gmail.com"
+                text="ibrahimaliansyah5@gmail.com"
                 color="red"
               />
             </div>
@@ -93,7 +93,7 @@ export default function Tentang() {
         </InfoCard>
 
         {/* Tech Stack */}
-        <InfoCard
+        {/* <InfoCard
           icon={faCode}
           title="Teknologi"
           gradient="from-blue-500 to-indigo-600"
@@ -114,10 +114,10 @@ export default function Tentang() {
               </span>
             ))}
           </div>
-        </InfoCard>
+        </InfoCard> */}
 
         {/* Repository */}
-        <InfoCard
+        {/* <InfoCard
           icon={faGithub}
           title="Repositori"
           gradient="from-gray-700 to-gray-900"
@@ -128,10 +128,10 @@ export default function Tentang() {
             text="github.com/taufiq33/quran-frontend"
             color="gray"
           />
-        </InfoCard>
+        </InfoCard> */}
 
         {/* Design */}
-        <InfoCard
+        {/* <InfoCard
           icon={faPalette}
           title="Desain Antarmuka"
           gradient="from-purple-500 to-pink-600"
@@ -155,10 +155,10 @@ export default function Tentang() {
               color="purple"
             />
           </div>
-        </InfoCard>
+        </InfoCard> */}
 
         {/* API Sources */}
-        <InfoCard
+        {/* <InfoCard
           icon={faDatabase}
           title="Sumber Data"
           gradient="from-teal-500 to-cyan-600"
@@ -185,7 +185,7 @@ export default function Tentang() {
               />
             </div>
           </div>
-        </InfoCard>
+        </InfoCard> */}
       </div>
 
       {/* Footer */}
@@ -203,10 +203,10 @@ export default function Tentang() {
           <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
           Ada pertanyaan atau saran? Hubungi:{" "}
           <a
-            href="mailto:taufiqqhidayatt@gmail.com"
+            href="mailto:ibrahimaliansyah5@gmail.com"
             className="font-semibold hover:underline"
           >
-            taufiqqhidayatt@gmail.com
+            ibrahimaliansyah5@gmail.com
           </a>
         </p>
       </div>
