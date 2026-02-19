@@ -83,7 +83,7 @@ export default function AsmaulHusnaPage() {
         </div>
 
         {/* Names Grid */}
-        <div className="px-4 pb-24 max-w-6xl mx-auto">
+        <div className="px-4 pb-24 max-w-6xl mx-auto" dir="rtl">
           <div className="space-y-4">
             {groupedNames.map((group, groupIndex) => (
               <div
@@ -107,7 +107,7 @@ export default function AsmaulHusnaPage() {
                       {/* Arabic Name */}
                       <div className="mb-3">
                         <p className="text-2xl md:text-3xl text-gray-800 font-arabic leading-relaxed">
-                          يَا {name.arab}
+                          {name.arab}
                         </p>
                       </div>
 
